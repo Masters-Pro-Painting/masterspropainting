@@ -31,7 +31,7 @@ Node 22.12 or newer.
 
 ## Forms
 
-The estimate form is a Netlify Form named `estimate`. Netlify stores every submission and emails the notification list. Zapier's Netlify "New Form Submission" trigger sends each lead to DripJobs. Hidden fields carry the page, UTM tags and Google click IDs.
+The estimate form is a Netlify Form named `estimate`. `scripts/form-contract.mjs` runs after every build and fails it if the form name or any field name changes, because Zapier maps them by name. Netlify stores every submission and emails the notification list. Zapier's Netlify "New Form Submission" trigger sends each lead to DripJobs. Hidden fields carry the page, UTM tags and Google click IDs.
 
 ## Tracking
 
