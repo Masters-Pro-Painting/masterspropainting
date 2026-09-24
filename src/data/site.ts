@@ -29,7 +29,7 @@ export const FORM_NAME = 'estimate';
 export const SITE = {
   name: "Master's Pro Painting Inc",
   short: "Master's Pro Painting",
-  url: 'https://masterspropaintinginc.company',
+  url: 'https://masterspropaint.com',
   owner: 'Vladimir Rivera',
   phone: '(323) 712-4699',
   tel: 'tel:+13237124699',

@@ -19,11 +19,11 @@
   PUBLIC_GA4_ID = "G-R13VQRGHV2"
   # Google Ads > Goals > Summary > Website Form Lead > Tag setup > Use Google Tag Manager.
   # Conversion ID, with or without "AW-". Example: AW-123456789 or 123456789
-  PUBLIC_ADS_ID = ""
+  PUBLIC_ADS_ID = "AW-18429319741"
   # Same screen: Conversion label. The label alone, or the whole "AW-123456789/AbC..." works.
-  PUBLIC_ADS_FORM_LABEL = ""
+  PUBLIC_ADS_FORM_LABEL = "9W9GCP6e84MdEL205NNE"
   # Google Ads > Goals > Summary > Website Calls 60s+ > Tag setup > Conversion label.
-  PUBLIC_ADS_CALL_LABEL = ""
+  PUBLIC_ADS_CALL_LABEL = "7ejNCIGf84MdEL205NNE"
 
 # Build files have unique names, so browsers can keep them for a year.
 [[headers]]

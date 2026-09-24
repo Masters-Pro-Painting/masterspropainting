@@ -1,14 +1,14 @@
 // Read-only check of the live site. Never submits the form (a test lead would
 // reach DripJobs through Zapier).
 //
-//   npm run build && node scripts/verify-live.mjs https://masterspropaintinginc.company
+//   npm run build && node scripts/verify-live.mjs https://masterspropaint.com
 //   node scripts/verify-live.mjs https://<project>.netlify.app --staging
 //     (--staging expects noindex and skips the old-URL redirects)
 import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const base = (process.argv[2] || 'https://masterspropaintinginc.company').replace(/\/$/, '');
+const base = (process.argv[2] || 'https://masterspropaint.com').replace(/\/$/, '');
 const STAGING = process.argv.includes('--staging');
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const BUILD = join(ROOT, 'dist');

@@ -1,6 +1,6 @@
 # Master's Pro Painting Inc — website
 
-Live site: https://masterspropaintinginc.company
+Live site: https://masterspropaint.com (email stays on masterspropaintinginc.company)
 Built with [Astro](https://astro.build). Hosted on Netlify. Every push to `main` publishes the site.
 
 ## Edit something
