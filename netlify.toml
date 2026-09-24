@@ -10,11 +10,19 @@
   # "true"  = whole site noindex + robots.txt blocks crawlers (use until the domain points here)
   # "false" = live and indexable
   PUBLIC_STAGING = "true"
-  # Tracking IDs. These are public values (they appear in every page's source).
-  # Empty = that piece of tracking is switched off.
-  PUBLIC_GA4_ID = ""
+  # ---- TRACKING: paste IDs between the quotes. Nothing else to install. ----
+  # Public values (they appear in every page's source). Empty = that tracking is off.
+  # Don't paste Google's <script> code anywhere. The site already has it built in.
+  # A value the site can't read fails the build, and the last good version stays live.
+  #
+  # GA4 > Admin > Data streams > your stream > Measurement ID. Looks like G-ABC123XYZ9
+  PUBLIC_GA4_ID = "G-R13VQRGHV2"
+  # Google Ads > Goals > Summary > Website Form Lead > Tag setup > Use Google Tag Manager.
+  # Conversion ID, with or without "AW-". Example: AW-123456789 or 123456789
   PUBLIC_ADS_ID = ""
+  # Same screen: Conversion label. The label alone, or the whole "AW-123456789/AbC..." works.
   PUBLIC_ADS_FORM_LABEL = ""
+  # Google Ads > Goals > Summary > Website Calls 60s+ > Tag setup > Conversion label.
   PUBLIC_ADS_CALL_LABEL = ""
 
 # Build files have unique names, so browsers can keep them for a year.

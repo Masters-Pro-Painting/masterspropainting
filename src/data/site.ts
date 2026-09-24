@@ -3,13 +3,25 @@
 // Set in netlify.toml. STAGING = noindex everything until the domain points here.
 export const STAGING = import.meta.env.PUBLIC_STAGING !== 'false';
 
-// Google tracking IDs (public values). Empty = that tracking is off.
-export const TRACKING = {
-  ga4: (import.meta.env.PUBLIC_GA4_ID ?? '').trim(),
-  ads: (import.meta.env.PUBLIC_ADS_ID ?? '').trim(),
-  adsFormLabel: (import.meta.env.PUBLIC_ADS_FORM_LABEL ?? '').trim(),
-  adsCallLabel: (import.meta.env.PUBLIC_ADS_CALL_LABEL ?? '').trim(),
-};
+// Google tracking IDs (public values), set in netlify.toml. Empty = that tracking is off.
+// Accepts the values however Google shows them: "123456789" or "AW-123456789" for the
+// Ads ID, "AbC123" or the whole "AW-123456789/AbC123" for a label. A value that can't be
+// read fails the build, so Netlify keeps the last good version live.
+const raw = (v: string | undefined) => (v ?? '').trim().replace(/^['"]+|['"]+$/g, '').trim();
+function readId(name: string, value: string, pattern: RegExp, format: (m: RegExpMatchArray) => string) {
+  if (!value) return '';
+  const m = value.match(pattern);
+  if (!m) throw new Error(`netlify.toml ${name} = "${value}" doesn't look right. Check the value Google gave you.`);
+  return format(m);
+}
+const ga4 = readId('PUBLIC_GA4_ID', raw(import.meta.env.PUBLIC_GA4_ID), /\bG-[A-Z0-9]{6,}\b/i, (m) => m[0].toUpperCase());
+const ads = readId('PUBLIC_ADS_ID', raw(import.meta.env.PUBLIC_ADS_ID), /^(?:AW-)?(\d{6,})(?:\/.*)?$/i, (m) => `AW-${m[1]}`);
+const LABEL = /^(?:AW-\d+\/)?([A-Za-z0-9_-]{6,})$/i;
+const adsFormLabel = readId('PUBLIC_ADS_FORM_LABEL', raw(import.meta.env.PUBLIC_ADS_FORM_LABEL), LABEL, (m) => m[1]);
+const adsCallLabel = readId('PUBLIC_ADS_CALL_LABEL', raw(import.meta.env.PUBLIC_ADS_CALL_LABEL), LABEL, (m) => m[1]);
+if ((adsFormLabel || adsCallLabel) && !ads) throw new Error('netlify.toml has a Google Ads label but PUBLIC_ADS_ID is empty.');
+
+export const TRACKING = { ga4, ads, adsFormLabel, adsCallLabel };
 
 // Netlify Forms form name. Zapier and the Netlify dashboard look for this exact name.
 export const FORM_NAME = 'estimate';
