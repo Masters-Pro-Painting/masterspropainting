@@ -1,0 +1,15 @@
+---
+import { SITE } from '../data/site';
+import TrustLogos from './TrustLogos.astro';
+interface Props { meta?: string }
+const { meta = 'Serving Tujunga · Burbank · Glendale<br>Hollywood Hills · Santa Monica · Venice' } = Astro.props;
+---
+<div class="proof-line">
+  <div>
+    <div class="score">{SITE.rating} <span class="stars">★★★★★</span></div>
+    <div class="small" style="font-size:13px;margin-top:4px">{SITE.reviewCount} five-star reviews on Google</div>
+  </div>
+  <div class="vr"></div>
+  <div class="meta" set:html={meta} />
+</div>
+<TrustLogos class="tl-hero" />

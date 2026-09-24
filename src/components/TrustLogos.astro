@@ -1,0 +1,63 @@
+---
+// Trust + profile logos. Brand glyphs come from Simple Icons (CC0 SVG paths).
+// Google Verified and PCA have no public icon source: drop the official
+// artwork into src/assets/badges/ as google-verified.(svg|png|webp) or
+// pca.(svg|png|webp) and it replaces the text badge automatically.
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { siYelp, siFacebook, siInstagram, siGoogle } from 'simple-icons';
+import { SITE, PROFILES } from '../data/site';
+
+interface Props {
+  linked?: boolean;
+  tone?: 'light' | 'dark';
+  class?: string;
+}
+const { linked = false, tone = 'light', class: cls } = Astro.props;
+
+const badgeFiles = import.meta.glob<{ default: ImageMetadata }>('../assets/badges/*.{svg,png,webp,jpg}', { eager: true });
+const badge = (name: string) => Object.entries(badgeFiles).find(([p]) => p.includes(`/badges/${name}.`))?.[1].default;
+const ggArt = badge('google-verified');
+const pcaArt = badge('pca');
+
+type Item = { key: string; label: string; sub?: string; href?: string; icon?: { path: string; hex: string }; art?: ImageMetadata; artHeight?: number; mark?: 'check' | 'pca' };
+const items: Item[] = [
+  { key: 'gg', label: 'Google Verified', href: PROFILES.googleVerified || undefined, art: ggArt, mark: 'check' },
+  { key: 'gbp', label: 'Google', sub: `${SITE.rating} ★ Reviews`, href: PROFILES.gbp, icon: { path: siGoogle.path, hex: siGoogle.hex } },
+  { key: 'yelp', label: 'Yelp', href: PROFILES.yelp, icon: { path: siYelp.path, hex: siYelp.hex } },
+  { key: 'fb', label: 'Facebook', href: PROFILES.facebook, icon: { path: siFacebook.path, hex: siFacebook.hex } },
+  { key: 'ig', label: 'Instagram', href: PROFILES.instagram, icon: { path: siInstagram.path, hex: siInstagram.hex } },
+  { key: 'pca', label: 'Painting Contractors Association', sub: pcaArt ? undefined : 'Painting Contractors Assoc.', href: PROFILES.pca, art: pcaArt, artHeight: 40, mark: 'pca' },
+];
+const aria = (i: Item) => `${SITE.name} on ${i.key === 'gbp' ? 'Google Business Profile' : i.label} (opens in a new tab)`;
+---
+<ul class:list={['trust-logos', `tl-${tone}`, linked && 'tl-linked', cls]} aria-label={linked ? 'Find us online' : 'Trusted and reviewed on'}>
+  {items.map((i) => {
+    const inner = (
+      <>
+        {i.art ? (
+          <Image src={i.art} alt={i.label} height={i.artHeight ?? 28} densities={[1, 2, 3]} class="tl-art" />
+        ) : (
+          <>
+            {i.icon && <svg class="tl-ico" viewBox="0 0 24 24" aria-hidden="true" style={`fill:#${i.icon.hex}`}><path d={i.icon.path} /></svg>}
+            {i.mark === 'check' && <svg class="tl-ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#1A73E8" /><path d="M7 12.4l3.2 3.1L17.2 8.6" fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+            {i.mark === 'pca' && <span class="tl-pca-mark" aria-hidden="true">PCA</span>}
+            <span class="tl-txt">
+              <span class="tl-label">{i.mark === 'pca' ? 'Member' : i.label}</span>
+              {i.sub && <span class="tl-sub">{i.sub}</span>}
+            </span>
+          </>
+        )}
+      </>
+    );
+    return (
+      <li class={`tl-item tl-${i.key}`}>
+        {linked && i.href ? (
+          <a href={i.href} target="_blank" rel="noopener" aria-label={aria(i)}>{inner}</a>
+        ) : (
+          <span class="tl-static" aria-label={i.mark === 'pca' ? 'Painting Contractors Association member' : i.label}>{inner}</span>
+        )}
+      </li>
+    );
+  })}
+</ul>

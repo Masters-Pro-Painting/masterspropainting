@@ -1,0 +1,53 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Sections from '../components/Sections.astro';
+import { SERVICES } from '../data/services';
+import { SITE, PRICES } from '../data/site';
+import { AREA_INDEX } from '../data/area-index';
+import { assertPhotoSet } from '../data/photos';
+import { photosOf, faqOf, type PageData } from '../data/types';
+
+export function getStaticPaths() {
+  return SERVICES.map((page) => ({ params: { service: page.slug }, props: { page } }));
+}
+
+interface Props { page: PageData }
+const { page } = Astro.props;
+assertPhotoSet(page.slug, photosOf(page));
+
+const priced = page.slug === 'interior-painting' ? PRICES.interior : page.slug === 'exterior-painting' ? PRICES.exterior : null;
+const serviceSchema: Record<string, unknown> = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: page.name,
+  serviceType: page.name,
+  url: new URL(`/${page.slug}/`, SITE.url).href,
+  provider: { '@id': `${SITE.url}/#business` },
+  areaServed: AREA_INDEX.map((a) => ({ '@type': 'City', name: `${a.city}, CA` })),
+  description: page.description,
+};
+if (priced) {
+  serviceSchema.offers = {
+    '@type': 'Offer',
+    priceSpecification: {
+      '@type': 'UnitPriceSpecification',
+      priceCurrency: 'USD',
+      minPrice: Number(priced.low.replace('$', '')),
+      maxPrice: Number(priced.high.replace('$', '')),
+      unitText: 'square foot',
+    },
+  };
+}
+---
+<Base
+  title={page.title}
+  description={page.description}
+  ogPhoto={page.hero.photo}
+  faq={faqOf(page)}
+  breadcrumbs={[{ href: '/', label: 'Home' }, { label: page.name }]}
+  schema={[serviceSchema]}
+>
+  <Hero hero={page.hero} />
+  <Sections sections={page.sections} />
+</Base>

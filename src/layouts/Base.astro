@@ -1,0 +1,232 @@
+---
+import '@fontsource/archivo/400.css';
+import '@fontsource/archivo/600.css';
+import '@fontsource/archivo/800.css';
+import '../styles/global.css';
+import { Image, getImage } from 'astro:assets';
+import font800 from '@fontsource/archivo/files/archivo-latin-800-normal.woff2?url';
+import font400 from '@fontsource/archivo/files/archivo-latin-400-normal.woff2?url';
+import logo from '../assets/brand/logo.webp';
+import { SITE, STAGING, TRACKING, NAV_SERVICES, PROFILES } from '../data/site';
+import TrustLogos from '../components/TrustLogos.astro';
+import { AREA_INDEX, REGIONS, areaHref } from '../data/area-index';
+import { photo } from '../data/photos';
+import type { QA } from '../data/types';
+import { stripTags } from '../data/types';
+
+interface Props {
+  title: string;
+  description: string;
+  ogPhoto?: string;
+  faq?: QA[];
+  breadcrumbs?: { href?: string; label: string }[];
+  schema?: Record<string, unknown>[];
+  noindex?: boolean;
+  minimalNav?: boolean;
+  noForm?: boolean;
+}
+const { title, description, ogPhoto = '013', faq = [], breadcrumbs = [], schema = [], noindex = false, minimalNav = false, noForm = false } = Astro.props;
+const estimateHref = noForm ? "/#estimate" : "#estimate";
+
+const canonical = new URL(Astro.url.pathname, SITE.url).href;
+const og = await getImage({ src: photo(ogPhoto).src, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogUrl = new URL(og.src, SITE.url).href;
+const robots = STAGING || noindex ? 'noindex, nofollow' : 'index, follow, max-image-preview:large';
+
+const business = {
+  '@context': 'https://schema.org',
+  '@type': 'HousePainter',
+  '@id': `${SITE.url}/#business`,
+  name: SITE.name,
+  url: SITE.url,
+  telephone: SITE.phoneE164,
+  email: SITE.email,
+  image: ogUrl,
+  logo: new URL(logo.src, SITE.url).href,
+  priceRange: '$$',
+  address: { '@type': 'PostalAddress', streetAddress: SITE.street, addressLocality: SITE.city, addressRegion: SITE.region, postalCode: SITE.zip, addressCountry: 'US' },
+  openingHours: SITE.hoursSchema,
+  areaServed: AREA_INDEX.map((a) => ({ '@type': 'City', name: `${a.city}, CA` })),
+  hasMap: SITE.mapsUrl,
+  sameAs: [PROFILES.gbp, PROFILES.yelp, PROFILES.facebook, PROFILES.instagram, PROFILES.youtube],
+  paymentAccepted: SITE.payments.join(', '),
+  aggregateRating: { '@type': 'AggregateRating', ratingValue: SITE.rating, reviewCount: SITE.reviewCount, bestRating: '5' },
+  hasCredential: {
+    '@type': 'EducationalOccupationalCredential',
+    credentialCategory: 'license',
+    name: `California Contractor License #${SITE.license} (${SITE.licenseClass})`,
+    recognizedBy: { '@type': 'GovernmentOrganization', name: 'Contractors State License Board' },
+  },
+};
+
+const graph: Record<string, unknown>[] = [business, ...schema];
+if (faq.length) {
+  graph.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: stripTags(f.a) } })),
+  });
+}
+if (breadcrumbs.length) {
+  graph.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: breadcrumbs.map((b, i) => ({ '@type': 'ListItem', position: i + 1, name: b.label, item: new URL(b.href ?? Astro.url.pathname, SITE.url).href })),
+  });
+}
+const year = 2026;
+const gtagId = TRACKING.ga4 || TRACKING.ads;
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta name="robots" content={robots} />
+  <link rel="canonical" href={canonical} />
+  <link rel="preload" as="font" type="font/woff2" href={font800} crossorigin />
+  <link rel="preload" as="font" type="font/woff2" href={font400} crossorigin />
+  <link rel="icon" type="image/webp" href={logo.src} />
+  <meta name="theme-color" content="#0B3D7A" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content={SITE.name} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:url" content={canonical} />
+  <meta property="og:image" content={ogUrl} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta name="twitter:card" content="summary_large_image" />
+  {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g)} />)}
+  {gtagId && (
+    <>
+      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></script>
+      <script is:inline define:vars={{ T: TRACKING, PHONE: SITE.phone, TEL: SITE.tel }}>
+        window.__MP_TRACKING = T;
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){ dataLayer.push(arguments); }
+        window.gtag = gtag;
+        gtag('js', new Date());
+        if (T.ga4) gtag('config', T.ga4);
+        if (T.ads) gtag('config', T.ads, { allow_enhanced_conversions: true });
+        if (T.ads && T.adsCallLabel) {
+          // Website call conversions. For visitors from an ad, Google hands back a
+          // forwarding number. Swap it into every visible number and tap-to-call link.
+          gtag('config', T.ads + '/' + T.adsCallLabel, {
+            phone_conversion_number: PHONE,
+            phone_conversion_callback: function (formatted, plain) {
+              var d = String(plain || formatted || '').replace(/\D/g, '');
+              if (d.length === 10) d = '1' + d;
+              if (d.length !== 11) return;
+              var swap = function () {
+                document.querySelectorAll('a[href="' + TEL + '"]').forEach(function (a) { a.setAttribute('href', 'tel:+' + d); });
+                var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+                var n; while ((n = w.nextNode())) { if (n.nodeValue.indexOf(PHONE) !== -1) n.nodeValue = n.nodeValue.split(PHONE).join(formatted); }
+              };
+              if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', swap); else swap();
+            }
+          });
+        }
+      </script>
+    </>
+  )}
+</head>
+<body>
+
+  <div class="topbar">
+    <div><span>Licensed, Bonded &amp; Insured</span><span>CA Lic. #{SITE.license}</span><span>{SITE.years} Years Experience</span><span>{SITE.rating}★ on Google</span></div>
+    <div class="tb-right"><span>{SITE.addressLine}</span><span>{SITE.hours}</span></div>
+  </div>
+
+  <header class="nav">
+    <a href="/" class="nav-logo" aria-label={`${SITE.name} home`}><Image src={logo} alt={SITE.name} height={60} width={70} densities={[1, 2, 3]} loading="eager" /></a>
+    {!minimalNav && (
+      <nav class="nav-links" aria-label="Main">
+        <div class="dd">
+          <button type="button" aria-haspopup="true">Services</button>
+          <div class="dd-menu">
+            {NAV_SERVICES.map((s) => <a href={s.href}>{s.label}</a>)}
+          </div>
+        </div>
+        <a href="/#gallery">Our Work</a>
+        <a href="/#reviews">Reviews</a>
+        <a href="/7-year-guarantee/">Guarantee</a>
+        <div class="dd">
+          <button type="button" aria-haspopup="true">Service Areas</button>
+          <div class="dd-menu two-col">
+            {AREA_INDEX.map((a) => <a href={areaHref(a.slug)}>{a.city}</a>)}
+            <a class="dd-all" href="/service-areas/">All Service Areas →</a>
+          </div>
+        </div>
+        <a href="/#faq">FAQ</a>
+      </nav>
+    )}
+    <div class="nav-cta">
+      <a href={SITE.tel} class="nav-phone">{SITE.phone}</a>
+      <a href={estimateHref} class="btn btn-red">Free Estimate</a>
+      {!minimalNav && <button class="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-burger><span></span><span></span><span></span></button>}
+    </div>
+  </header>
+  {!minimalNav && (
+    <div class="mobile-menu" id="mobile-menu">
+      <div class="mm-head">Services</div>
+      {NAV_SERVICES.map((s) => <a href={s.href}>{s.label}</a>)}
+      <div class="mm-head">Company</div>
+      <a href="/#gallery">Our Work</a><a href="/#reviews">Reviews</a><a href="/7-year-guarantee/">7-Year Guarantee</a><a href="/#faq">FAQ</a>
+      <div class="mm-head">Service Areas</div>
+      {AREA_INDEX.map((a) => <a href={areaHref(a.slug)}>{a.city}</a>)}
+      <a href="/service-areas/">All Service Areas</a>
+    </div>
+  )}
+
+  {breadcrumbs.length > 0 && (
+    <nav class="crumbs" aria-label="Breadcrumb"><ol>{breadcrumbs.map((c) => <li>{c.href ? <a href={c.href}>{c.label}</a> : <span aria-current="page">{c.label}</span>}</li>)}</ol></nav>
+  )}
+
+  <main><slot /></main>
+
+  <footer class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="logo-tile"><Image src={logo} alt={SITE.name} height={52} width={60} densities={[1, 2, 3]} /></div>
+        <p>Licensed, bonded and insured residential and commercial painters. Based on Foothill Blvd in Tujunga and serving the foothills, the Valley and the Westside.</p>
+        <p style="margin-top:14px;font-size:14px">CA Contractor License #{SITE.license} · {SITE.licenseClass}</p>
+      </div>
+      {!minimalNav && (
+        <div><div class="fh">Services</div><div class="fl">{NAV_SERVICES.map((s) => <a href={s.href}>{s.label}</a>)}</div></div>
+      )}
+      {!minimalNav && (
+        <div><div class="fh">Service Areas</div><div class="fl">{AREA_INDEX.map((a) => <a href={areaHref(a.slug)}>{a.city}, CA</a>)}</div></div>
+      )}
+      <div><div class="fh">Contact</div><div class="fl">
+        <a href={SITE.tel} class="fphone">{SITE.phone}</a>
+        <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+        <a href={SITE.mapsUrl} target="_blank" rel="noopener">{SITE.street}<br />{SITE.city}, {SITE.region} {SITE.zip}</a>
+        <span>{SITE.hours}</span>
+        <span>We accept {SITE.payments.join(', ')}</span>
+        {!minimalNav && <a href="/7-year-guarantee/">7-Year Workmanship Guarantee</a>}
+      </div></div>
+    </div>
+    <div class="footer-profiles">
+      <div class="fh">{minimalNav ? 'Trusted and Reviewed On' : 'Find Us Online'}</div>
+      <TrustLogos linked={!minimalNav} tone="dark" />
+    </div>
+    <div class="footer-bottom">
+      <span>© {year} {SITE.name}. All rights reserved. CA Lic. #{SITE.license}. Licensed, Bonded &amp; Insured.</span>
+      <span><a href="/privacy-policy/">Privacy Policy</a> · <a href="/sitemap-index.xml">Sitemap</a></span>
+    </div>
+  </footer>
+
+  <div class="callbar">
+    <a class="c1" href={SITE.tel}>Call Now</a>
+    <a class="c2" href={estimateHref}>Free Estimate</a>
+  </div>
+
+  <script>
+    import { initSite } from '../scripts/site';
+    initSite();
+  </script>
+</body>
+</html>

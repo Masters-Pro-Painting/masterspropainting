@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Stats from '../../components/Stats.astro';
+import Sections from '../../components/Sections.astro';
+import Photo from '../../components/Photo.astro';
+import { SITE } from '../../data/site';
+import { AREA_INDEX, REGIONS, areaHref } from '../../data/area-index';
+import { AREAS } from '../../data/areas';
+
+const blurb = (slug: string) => AREAS.find((a) => a.slug === slug)?.hero.lede ?? '';
+---
+<Base
+  title="Service Areas | Tujunga, the Valley & Westside | Master's Pro"
+  description={`House painters serving 12 communities from our Tujunga shop: the foothills, the San Fernando Valley and the Westside. Free estimates: ${SITE.phone}.`}
+  ogPhoto="001"
+  breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Service Areas' }]}
+>
+  <Hero hero={{
+    variant: 'split',
+    kicker: 'Service Areas · Los Angeles County',
+    h1: 'Painters Serving Tujunga, the Valley and the Westside',
+    lede: `Our shop is on Foothill Blvd in Tujunga. From there we paint homes and businesses across the foothills, the San Fernando Valley and the Westside. Estimates are free everywhere we work.`,
+    bullets: ['12 Communities Served', 'Free On-Site Estimates', `${SITE.guaranteeYears}-Year Workmanship Guarantee`, `Licensed CA #${SITE.license}`],
+    photo: '001',
+    formTitle: 'Check if we serve your area',
+    proofMeta: 'Foothills · San Fernando Valley<br>Westside',
+  }} />
+  <Stats />
+  {REGIONS.map((r, i) => (
+    <section class:list={['section', i % 2 === 1 && 'alt']}>
+      <div class="section-head"><div><div class="kicker">{r}</div><h2 class="h2">House Painters in the {r === 'Foothills' ? 'Foothills' : r === 'Westside' ? 'Westside' : 'San Fernando Valley'}</h2></div></div>
+      <div class="link-grid">
+        {AREA_INDEX.filter((a) => a.region === r).map((a) => (
+          <a href={areaHref(a.slug)}><span class="t">{a.city}, CA</span><span class="d">{blurb(a.slug)}</span><span class="go">Painters in {a.city} →</span></a>
+        ))}
+      </div>
+    </section>
+  ))}
+  <section class="split">
+    <div class="pad rule-r">
+      <div class="kicker">Not Listed?</div>
+      <h2 class="h2 mb-24">Ask Us. We Probably Cover It.</h2>
+      <p class="copy">These are the communities we work in most. If you are nearby and not on the list, call {SITE.phone} or send the form and we will tell you straight away.</p>
+      <div class="btn-row mt-32"><a href="#estimate" class="btn btn-red">Request a Free Estimate →</a><a href={SITE.tel} class="btn btn-outline">Call {SITE.phone}</a></div>
+    </div>
+    <div class="media" style="min-height:420px">
+      <Photo id="008" />
+      <div class="addr-bar">
+        <div><div style="font-size:15px;font-weight:800">{SITE.name}</div><div class="small">{SITE.addressLine}</div></div>
+        <a href={SITE.mapsUrl} target="_blank" rel="noopener" style="font-weight:800;font-size:14px">Get Directions →</a>
+      </div>
+    </div>
+  </section>
+  <Sections sections={[{ type: 'reviews', kicker: 'Google Reviews', h2: `${SITE.rating} Stars Across ${SITE.reviewCount} Reviews`, keys: ['mario', 'hugo', 'marybeth'] }]} />
+</Base>

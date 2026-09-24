@@ -1,0 +1,98 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Sections from '../components/Sections.astro';
+import { SITE } from '../data/site';
+import type { QA } from '../data/types';
+
+// Terms mirror the certificate: MastersPro7YearWorkmanshipGuarantee.pdf
+const g = SITE.guaranteeYears;
+const faq: QA[] = [
+  { q: 'Does the guarantee transfer if I sell my house?', a: 'No. It belongs to the customer named on the certificate and applies to the property named on it.' },
+  { q: 'Do I have to pay for the paint on a repair?', a: 'No. For a covered failure we supply the labor and the paint.' },
+  { q: 'How fast do you come out after I report a problem?', a: 'We book a time to come look, usually within 10 business days.' },
+  { q: 'Is this instead of the paint manufacturer warranty?', a: 'No. The paint carries its own manufacturer warranty on the product. Our guarantee covers the work. If a product fails on its own, we help you make the claim with the manufacturer.' },
+];
+---
+<Base
+  title={`${g}-Year Workmanship Guarantee | Master's Pro Painting Inc`}
+  description={`Master's Pro Painting Inc guarantees its workmanship for ${g} years. Labor and paint, in writing. Here is exactly what is covered, what is not, and how to make a claim.`}
+  ogPhoto="052"
+  faq={faq}
+  breadcrumbs={[{ href: '/', label: 'Home' }, { label: `${g}-Year Guarantee` }]}
+>
+  <Hero hero={{
+    variant: 'split',
+    kicker: 'Certificate of Workmanship Guarantee',
+    h1: `Our ${g}-Year Workmanship Guarantee. Labor and Materials. In Writing.`,
+    lede: `We prepared and painted your property the right way. If our workmanship fails within ${g} years of completion, we come back and fix it. No charge for labor. No charge for paint.`,
+    bullets: [`${g} Years From Completion`, 'Labor and Paint Included', 'Written Certificate With Every Job', `CA Lic. #${SITE.license}`],
+    photo: '052',
+    formTitle: 'Get a guaranteed painting quote',
+    proofMeta: `Licensed, bonded & insured<br>${SITE.licenseClass}`,
+  }} />
+
+  <section class="section">
+    <div class="section-head"><div><div class="kicker">The Terms</div><h2 class="h2">What Is Covered and What Is Not</h2><p class="copy">Written in plain English so you know exactly where you stand. This guarantee is in addition to any rights you have under California law and to the paint manufacturer's own product warranty.</p></div></div>
+    <div class="two-col-terms">
+      <div>
+        <h3>What is covered</h3>
+        <p style="font-size:15px;color:#444141;margin-bottom:10px">For {g} years from the completion date on your certificate, we guarantee our workmanship on every surface we prepared and painted. If the paint fails because of how we prepared the surface or applied the coating, we fix it at no cost to you. Failure means:</p>
+        <ul><li>Peeling</li><li>Blistering or bubbling</li><li>Flaking or chipping</li><li>Cracking or alligatoring of the coating</li><li>Loss of adhesion from the surface we painted</li></ul>
+      </div>
+      <div>
+        <h3>What is not covered</h3>
+        <ul>
+          <li>Normal wear and tear, scuffs, scratches, marks, stains, dirt or fingerprints</li>
+          <li>Fading, chalking or color change caused by sun and weather</li>
+          <li>Damage from water, leaks, roof or plumbing failures, moisture inside walls, condensation or poor drainage</li>
+          <li>Structural movement, settling, new cracks in stucco, drywall, plaster or wood</li>
+          <li>Rot, rust, mold, mildew or insect damage in the material under the paint</li>
+          <li>Failure of previous coats of paint we did not apply</li>
+          <li>Surfaces we advised against painting or repairing, where you asked us to paint anyway</li>
+          <li>Surfaces we did not prepare or paint, and paint or material supplied by the customer</li>
+          <li>Horizontal and high-wear surfaces: decks, floors, steps, handrails, garage floors, countertops</li>
+          <li>Caulk and sealant shrinkage, or cracks at joints and seams</li>
+          <li>Damage from other trades, renovation, cleaning chemicals, pressure washing, pets, accidents, vandalism, fire, earthquake, flood or other acts of nature</li>
+          <li>Any repair or touch-up done by someone other than {SITE.name}</li>
+        </ul>
+      </div>
+      <div>
+        <h3>What we do about it</h3>
+        <p style="font-size:15px;color:#444141">We inspect the area, then re-prepare and repaint the affected area. We supply the labor and the paint. We use the same product and color where it is still available. We match the existing finish as closely as we can, but because paint weathers over time we cannot promise an exact match between new and old areas.</p>
+      </div>
+      <div>
+        <h3>Conditions</h3>
+        <ul>
+          <li>The final invoice for the job has been paid in full.</li>
+          <li>You tell us within 30 days of first noticing the problem, by phone, text or email.</li>
+          <li>You give us reasonable access to inspect and repair.</li>
+          <li>The guarantee belongs to the customer and property named on the certificate. It does not transfer to a new owner.</li>
+          <li>Our total responsibility is limited to repairing or repainting the affected area and never exceeds the original contract price for the work.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="pad rule-r">
+      <div class="kicker">Making a Claim</div>
+      <h2 class="h2 mb-24">Something Looks Wrong? Tell Us.</h2>
+      <div class="copy">
+        <p>Call or text <a href={SITE.tel}><b>{SITE.phone}</b></a> or email <a href={`mailto:${SITE.email}`}><b>{SITE.email}</b></a>.</p>
+        <p>Tell us your name and the property address, and send a photo if you can. We will book a time to come look, usually within 10 business days.</p>
+      </div>
+    </div>
+    <div class="pad" style="background:#0B3D7A;color:#f3f2f2">
+      <div class="kicker" style="color:#ffb3ad">Why {g} Years</div>
+      <h2 class="h2 mb-24">If We Did It Right, There Is Nothing to Fix</h2>
+      <p class="copy" style="color:#dfe6ef">We offer {g} years because we do the prep properly, we use quality products, and we do not cut corners to finish faster. If we did the job right, there is nothing to fix. If we did not, we want to be the ones who make it right.</p>
+    </div>
+  </section>
+
+  <Sections sections={[
+    { type: 'reviews', kicker: 'Clients on How We Stand Behind Our Work', h2: `Rated ${SITE.rating} Across ${SITE.reviewCount} Google Reviews`, keys: ['shane', 'karla', 'mario'] },
+    { type: 'faq', h2: 'Guarantee FAQ', intro: 'The fine print, answered in plain English.', items: faq },
+    { type: 'poster', kicker: 'Guaranteed Painting', h2: `Get a Quote Backed by ${g} Years in Writing`, body: 'Free on-site estimate. Written quote. Certificate with every finished job.' },
+  ]} />
+</Base>

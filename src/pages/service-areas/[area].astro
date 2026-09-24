@@ -1,0 +1,39 @@
+---
+import Base from '../../layouts/Base.astro';
+import Hero from '../../components/Hero.astro';
+import Sections from '../../components/Sections.astro';
+import { AREAS } from '../../data/areas';
+import { SITE } from '../../data/site';
+import { assertPhotoSet } from '../../data/photos';
+import { photosOf, faqOf, type PageData } from '../../data/types';
+
+export function getStaticPaths() {
+  return AREAS.map((page) => ({ params: { area: page.slug }, props: { page } }));
+}
+
+interface Props { page: PageData }
+const { page } = Astro.props;
+assertPhotoSet(`service-areas/${page.slug}`, photosOf(page));
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'Service',
+  name: `House Painting in ${page.name}, CA`,
+  serviceType: 'House Painting',
+  url: new URL(`/service-areas/${page.slug}/`, SITE.url).href,
+  provider: { '@id': `${SITE.url}/#business` },
+  areaServed: { '@type': 'City', name: `${page.name}, CA` },
+  description: page.description,
+};
+---
+<Base
+  title={page.title}
+  description={page.description}
+  ogPhoto={page.hero.photo}
+  faq={faqOf(page)}
+  breadcrumbs={[{ href: '/', label: 'Home' }, { href: '/service-areas/', label: 'Service Areas' }, { label: `${page.name}, CA` }]}
+  schema={[schema]}
+>
+  <Hero hero={page.hero} />
+  <Sections sections={page.sections} />
+</Base>

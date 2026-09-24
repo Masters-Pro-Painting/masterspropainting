@@ -1,0 +1,13 @@
+---
+import { SITE } from '../data/site';
+interface Props { items?: { n: string; l: string }[] }
+const { items = [
+  { n: `${SITE.years}`, l: 'Years of Painting Experience' },
+  { n: `${SITE.rating}★`, l: 'Google Rating' },
+  { n: `${SITE.reviewCount}`, l: 'Five-Star Google Reviews' },
+  { n: `${SITE.guaranteeYears} yr`, l: 'Workmanship Guarantee' },
+] } = Astro.props;
+---
+<div class="stats">
+  {items.map((s) => <div><div class="n">{s.n}</div><div class="l">{s.l}</div></div>)}
+</div>

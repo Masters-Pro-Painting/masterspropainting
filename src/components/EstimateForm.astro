@@ -1,0 +1,62 @@
+---
+import { SERVICE_OPTIONS, SITE, FORM_NAME } from '../data/site';
+
+interface Props {
+  kicker?: string;
+  title?: string;
+  service?: string;
+  id?: string;
+}
+const {
+  kicker = 'Free Estimate · No Obligation',
+  title = 'Tell us about your project',
+  service = '',
+  id = 'estimate',
+} = Astro.props;
+
+// Filled in by src/scripts/site.ts before submit. Netlify stores every field
+// declared here, and Zapier can map any of them.
+const TRACKING_FIELDS = [
+  'page_url', 'page_title', 'referrer', 'landing_page',
+  'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+  'gclid', 'gbraid', 'wbraid', 'fbclid', 'submitted_at',
+];
+---
+<div class="form-card" id={id}>
+  <form
+    class="lead-form"
+    name={FORM_NAME}
+    method="POST"
+    action="/thank-you/"
+    data-netlify="true"
+    netlify-honeypot="company_website"
+    novalidate
+    data-lead-form
+  >
+    <input type="hidden" name="form-name" value={FORM_NAME} />
+    {TRACKING_FIELDS.map((f) => <input type="hidden" name={f} value="" data-track={f} />)}
+    <div class="kicker">{kicker}</div>
+    <div class="title">{title}</div>
+    <div class="form-grid">
+      <label class="field"><span class="sr-only">Full name</span>
+        <input name="name" autocomplete="name" placeholder="Full name" required />
+      </label>
+      <label class="field"><span class="sr-only">Phone</span>
+        <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Phone" required />
+      </label>
+      <label class="field"><span class="sr-only">City or ZIP</span>
+        <input name="city" autocomplete="postal-code" placeholder="City or ZIP" />
+      </label>
+      <label class="field"><span class="sr-only">Service needed</span>
+        <select name="service">
+          <option value="">Service needed</option>
+          {SERVICE_OPTIONS.map((s) => <option selected={s === service}>{s}</option>)}
+        </select>
+      </label>
+    </div>
+    <div class="hp" aria-hidden="true"><label>Leave empty<input name="company_website" tabindex="-1" autocomplete="off" /></label></div>
+    <button type="submit" class="btn btn-red">Request My Free Estimate →</button>
+    <div class="err" role="alert" aria-live="polite"></div>
+    <div class="micro">We reply within one business day. No spam, ever. Or call <a href={SITE.tel}>{SITE.phone}</a>.</div>
+  </form>
+</div>

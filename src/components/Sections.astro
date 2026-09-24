@@ -1,0 +1,193 @@
+---
+import type { Section } from '../data/types';
+import { SITE, PRICES } from '../data/site';
+import { pick, REVIEWS } from '../data/reviews';
+import Photo from './Photo.astro';
+import Stats from './Stats.astro';
+import TrustStrip from './TrustStrip.astro';
+import ReviewCard from './ReviewCard.astro';
+
+interface Props { sections: Section[] }
+const { sections } = Astro.props;
+---
+{sections.map((s) => {
+  switch (s.type) {
+    case 'stats': return <Stats />;
+    case 'trust': return <TrustStrip />;
+
+    case 'split': return (
+      <section class:list={['split', s.bg]}>
+        {s.reverse && <div class="media rule-r" style="border-right:2px solid #201e1d"><Photo id={s.photo} /></div>}
+        <div class:list={['pad', !s.reverse && 'rule-r']}>
+          <div class="kicker">{s.kicker}</div>
+          <h2 class="h2 mb-24">{s.h2}</h2>
+          <div class="copy">{s.paras.map((p) => <p set:html={p} />)}</div>
+          {s.cta && <a href="#estimate" class="btn btn-red mt-32">{s.cta}</a>}
+        </div>
+        {!s.reverse && <div class="media"><Photo id={s.photo} /></div>}
+      </section>
+    );
+
+    case 'checklist': return (
+      <section class:list={['split', s.bg]}>
+        {s.reverse && <div class="media" style="border-right:2px solid #201e1d"><Photo id={s.photo} /></div>}
+        <div class:list={['pad', !s.reverse && 'rule-r']}>
+          <div class="kicker">{s.kicker}</div>
+          <h2 class="h2 mb-24">{s.h2}</h2>
+          {s.intro && <p class="copy mb-24" set:html={s.intro} />}
+          <ul class="list-checks">{s.items.map((i) => <li set:html={i} />)}</ul>
+          <a href="#estimate" class="btn btn-outline mt-32">Get My Free Estimate →</a>
+        </div>
+        {!s.reverse && <div class="media"><Photo id={s.photo} /></div>}
+      </section>
+    );
+
+    case 'price': return (
+      <section class:list={['section', s.bg]}>
+        <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2></div></div>
+        <div class="price-wrap">
+          <div class="price-main">
+            {s.range ? (
+              <>
+                <div class="small" style="font-weight:800;text-transform:uppercase;letter-spacing:.06em">Typical range</div>
+                <div class="range">{s.range}</div>
+                <div class="unit">{s.unit}</div>
+              </>
+            ) : (
+              <>
+                <div class="small" style="font-weight:800;text-transform:uppercase;letter-spacing:.06em">How it is priced</div>
+                <div class="range" style="font-size:clamp(30px,3.4vw,44px)">Quoted per project</div>
+                <div class="unit">{s.pending}</div>
+              </>
+            )}
+            <p class="copy mt-24" set:html={s.note} />
+            <div class="btn-row mt-24"><a href="#estimate" class="btn btn-red">Get My Exact Price →</a><a href={SITE.tel} class="btn btn-outline">{SITE.phone}</a></div>
+          </div>
+          <div class="price-side">
+            <div style="font-size:17px;font-weight:800">What moves the price</div>
+            <ul>{s.factors.map((f) => <li>{f}</li>)}</ul>
+          </div>
+        </div>
+      </section>
+    );
+
+    case 'prices': return (
+      <section class:list={['section', s.bg]}>
+        <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2><p class="copy" set:html={s.intro} /></div>
+          <a href="#estimate" class="btn btn-outline">Get My Exact Price →</a></div>
+        <div class="price-duo">
+          <div><div class="h3">Interior Painting</div><div class="range">{PRICES.interior.low} to {PRICES.interior.high}</div><div class="small" style="font-weight:800">{PRICES.interior.unit}</div><p class="small mt-16">Walls, ceilings, trim and doors. <a href="/interior-painting/">Interior painting →</a></p></div>
+          <div><div class="h3">Exterior Painting</div><div class="range">{PRICES.exterior.low} to {PRICES.exterior.high}</div><div class="small" style="font-weight:800">{PRICES.exterior.unit}</div><p class="small mt-16">Stucco, siding, trim and eaves. <a href="/exterior-painting/">Exterior painting →</a></p></div>
+          <div><div class="h3">Cabinets, Staining & More</div><div class="range" style="font-size:clamp(24px,2.6vw,30px)">Quoted per project</div><div class="small" style="font-weight:800">after a free walkthrough</div><p class="small mt-16">Cabinets, wood, epoxy and drywall. <a href="#estimate">Request a quote →</a></p></div>
+        </div>
+      </section>
+    );
+
+    case 'grid': return (
+      <section class:list={['section', s.bg]}>
+        <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2>{s.intro && <p class="copy" set:html={s.intro} />}</div></div>
+        <div class="photo-grid four">
+          {s.tiles.map((t) => (
+            <figure class="tile"><Photo id={t.photo} sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 25vw" /><figcaption>{t.label}</figcaption></figure>
+          ))}
+        </div>
+      </section>
+    );
+
+    case 'steps': return (
+      <section class:list={['section', s.bg]}>
+        <div class="kicker">{s.kicker}</div>
+        <h2 class="h2 maxw-760" style="margin-bottom:40px">{s.h2}</h2>
+        <div class="steps">
+          {s.steps.map((st, i) => <div><div class="n">{String(i + 1).padStart(2, '0')}</div><div class="t">{st.t}</div><p>{st.b}</p></div>)}
+        </div>
+      </section>
+    );
+
+    case 'reviews': return (
+      <section class:list={['section', s.bg ?? 'alt']}>
+        <div class="section-head">
+          <div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2></div>
+          <a class="google-badge" href={SITE.mapsUrl} target="_blank" rel="noopener"><span class="stars">★★★★★</span> {SITE.rating} · {SITE.reviewCount} Google Reviews</a>
+        </div>
+        <div class="review-grid">{pick(s.keys).map((r) => <ReviewCard review={r} />)}</div>
+      </section>
+    );
+
+    case 'pullquote': {
+      const r = REVIEWS[s.key];
+      if (!r) throw new Error(`pullquote review ${s.key} missing`);
+      return (
+        <section class="pullquote">
+          <div class="pq">
+            <div class="kicker" style="color:#ff9a92">{s.kicker ?? 'From Our Google Reviews'}</div>
+            <div class="stars" style="color:#ff6f64;font-size:20px">★★★★★</div>
+            <blockquote>“{r.text}”</blockquote>
+            <div class="who">{r.name}</div>
+            <div class="meta">Google review{r.service ? ` · ${r.service}` : ''}{r.translated ? ' · Translated from Spanish by Google' : ''}</div>
+          </div>
+          <div class="side">
+            <div class="big">{SITE.rating}</div>
+            <div class="stars">★★★★★</div>
+            <p style="color:#d8d4d4;font-size:16px">{SITE.reviewCount} Google reviews. Every one of them five stars. <a href={SITE.mapsUrl} target="_blank" rel="noopener">Read them on Google</a>.</p>
+            <div class="btn-row"><a href="#estimate" class="btn btn-red">Get a Free Estimate →</a></div>
+          </div>
+        </section>
+      );
+    }
+
+    case 'guarantee': return (
+      <section class="guarantee">
+        <div class="pad">
+          <div class="seal"><div><b>{SITE.guaranteeYears}</b><span>YEAR<br />GUARANTEE</span></div></div>
+          <div class="kicker">In Writing. Labor and Materials.</div>
+          <h2 class="h2 mb-24">{s.h2 ?? `Our ${SITE.guaranteeYears}-Year Workmanship Guarantee`}</h2>
+          <p class="copy" set:html={s.body ?? `If our work peels, blisters, flakes, cracks or lets go within ${SITE.guaranteeYears} years because of how we prepped or painted it, we come back and fix it. No charge for labor. No charge for paint. We can put ${SITE.guaranteeYears} years in writing because we do the prep.`} />
+          {s.note && <p class="note" set:html={s.note} />}
+          <div class="btn-row mt-32"><a href="#estimate" class="btn btn-red">Book a Free Estimate →</a><a href="/7-year-guarantee/" class="btn btn-outline-white">Read the Full Terms</a></div>
+        </div>
+        <div class="media"><Photo id={s.photo} /></div>
+      </section>
+    );
+
+    case 'faq': return (
+      <section class="faq">
+        <div class="intro">
+          <div class="kicker">{s.kicker ?? 'Your Questions Answered'}</div>
+          <h2 class="h2 mb-24">{s.h2}</h2>
+          <p style="font-size:16px;color:#444141;margin-bottom:24px">{s.intro}</p>
+          <a href={SITE.tel} style="font-weight:800;font-size:18px;color:#0B3D7A">{SITE.phone} →</a>
+        </div>
+        <div class="items" data-faq>
+          {s.items.map((f, i) => (
+            <details open={i === 0}><summary>{f.q}</summary><div class="a" set:html={f.a} /></details>
+          ))}
+        </div>
+      </section>
+    );
+
+    case 'poster': return s.photo ? (
+      <section class="poster-split">
+        <div class="poster">
+          <div><div class="kicker">{s.kicker}</div><h2 class="h2-poster">{s.h2}</h2></div>
+          <div><p>{s.body}</p><div class="btn-row"><a href="#estimate" class="btn btn-white">Book a Free Estimate →</a><a href={SITE.tel} class="btn btn-outline-white">{SITE.phone}</a></div></div>
+        </div>
+        <div class="media"><Photo id={s.photo} /></div>
+      </section>
+    ) : (
+      <section class="poster">
+        <div><div class="kicker">{s.kicker}</div><h2 class="h2-poster">{s.h2}</h2></div>
+        <div><p>{s.body}</p><div class="btn-row"><a href="#estimate" class="btn btn-white">Book a Free Estimate →</a><a href={SITE.tel} class="btn btn-outline-white">{SITE.phone}</a></div></div>
+      </section>
+    );
+
+    case 'links': return (
+      <section class:list={['section', s.bg]}>
+        <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2>{s.intro && <p class="copy" set:html={s.intro} />}</div></div>
+        <div class="link-grid">
+          {s.links.map((l) => <a href={l.href}><span class="t">{l.t}</span>{l.d && <span class="d">{l.d}</span>}<span class="go">Learn more →</span></a>)}
+        </div>
+      </section>
+    );
+  }
+})}

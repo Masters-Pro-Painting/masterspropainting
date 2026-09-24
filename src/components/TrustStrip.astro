@@ -1,0 +1,11 @@
+---
+import { SITE } from '../data/site';
+interface Props { items?: string[] }
+const { items = [
+  `CA Lic. #${SITE.license}`,
+  'Licensed, Bonded & Insured',
+  `${SITE.guaranteeYears}-Year Workmanship Guarantee`,
+  `${SITE.rating} Stars · ${SITE.reviewCount} Google Reviews`,
+] } = Astro.props;
+---
+<div class="trust">{items.map((t) => <div>{t}</div>)}</div>

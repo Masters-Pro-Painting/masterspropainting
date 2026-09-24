@@ -1,0 +1,13 @@
+---
+import type { Review } from '../data/reviews';
+interface Props { review: Review }
+const { review: r } = Astro.props;
+---
+<figure class="review">
+  <div class="stars" aria-label="5 out of 5 stars">★★★★★</div>
+  <blockquote>“{r.text}”</blockquote>
+  <figcaption>
+    <div class="who">{r.name}</div>
+    <div class="meta">Google review · {r.age}{r.service ? ` · ${r.service}` : ''}{r.translated ? ' · Translated from Spanish by Google' : ''}</div>
+  </figcaption>
+</figure>

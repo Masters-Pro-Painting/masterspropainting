@@ -1,0 +1,90 @@
+---
+// Paid traffic landing page (Google Ads / LSA / Meta). noindex, minimal nav,
+// no outbound links except phone and legal. Swap headline per ad group with
+// ?service=interior | exterior | cabinets | commercial
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import EstimateForm from '../components/EstimateForm.astro';
+import ProofLine from '../components/ProofLine.astro';
+import Sections from '../components/Sections.astro';
+import { SITE, PRICES } from '../data/site';
+import { assertPhotoSet } from '../data/photos';
+import type { Section } from '../data/types';
+
+const g = SITE.guaranteeYears;
+const swap = {
+  interior: { h1: `Interior Painting in Los Angeles From ${PRICES.interior.low} per Sq Ft`, lede: `Walls, ceilings, trim and doors. Floors and furniture protected. ${g}-year workmanship guarantee. Get your free written quote.`, option: 'Interior Painting' },
+  exterior: { h1: `Exterior House Painting From ${PRICES.exterior.low} per Sq Ft`, lede: `Washed, scraped, patched and primed before the finish goes on. Built for the LA sun. ${g}-year workmanship guarantee.`, option: 'Exterior Painting' },
+  cabinets: { h1: 'Cabinet Painting in Los Angeles. New Kitchen Look, No Remodel.', lede: 'Degreased, sanded, primed and sprayed. No brush marks. Kitchens, vanities and built-ins.', option: 'Cabinet Painting' },
+  commercial: { h1: 'Commercial Painting for Clinics, Offices and Retail', lede: `Planned around your hours so your doors stay open. Licensed CA #${SITE.license}, bonded and insured.`, option: 'Commercial Painting' },
+};
+
+const sections: Section[] = [
+  { type: 'trust' },
+  { type: 'reviews', kicker: `${SITE.reviewCount} Google Reviews. All Five Stars.`, h2: 'Read What Our Clients Wrote', keys: ['mario', 'wendy', 'heather', 'hugo', 'estefany', 'nelson'] },
+  { type: 'grid', kicker: 'Real Jobs. Real Photos.', h2: 'Work by Our Crew', intro: 'No stock photos. Every image is a Master\'s Pro job.', tiles: [{ photo: '043', label: 'Cabinets' }, { photo: '060', label: 'Interior' }, { photo: '102', label: 'Exterior' }, { photo: '036', label: 'Epoxy floor' }] },
+  { type: 'prices', kicker: 'Straight Pricing', h2: 'What Painting Costs', intro: 'Real ranges up front. Your exact price comes in writing after a free on-site look.', bg: 'alt' },
+  { type: 'guarantee', photo: '052' },
+  {
+    type: 'split', kicker: 'Why Homeowners Pick Us', h2: 'Licensed. Local. Obsessed With Prep.', photo: '008', reverse: true,
+    paras: [
+      `Master's Pro Painting Inc is a licensed, bonded and insured California contractor, license #${SITE.license}, based on Foothill Blvd in Tujunga.`,
+      `${SITE.reviewCount} Google reviews, every one five stars. Clients mention the prep, the clean job site and showing up on time again and again.`,
+      `And we put ${g} years of workmanship guarantee in writing. Labor and paint.`,
+    ],
+    cta: 'Get My Free Estimate →',
+  },
+  {
+    type: 'steps', kicker: 'What Happens Next', h2: 'From Form to Fresh Paint', bg: 'alt',
+    steps: [
+      { t: 'Send the Form', b: 'Name, phone and what you need painted. Takes 30 seconds.' },
+      { t: 'We Call You', b: 'We reply within one business day to book your free on-site estimate.' },
+      { t: 'Written Quote', b: 'We walk the job, measure and send a clear written price.' },
+      { t: 'We Paint', b: `Protected, prepped and painted. Backed by our ${g}-year guarantee.` },
+    ],
+  },
+  {
+    type: 'faq', h2: 'Before You Book', intro: 'Quick answers to the questions people ask first.',
+    items: [
+      { q: 'Is the estimate really free?', a: 'Yes. The on-site estimate and the written quote are free, with no obligation.' },
+      { q: 'How much does painting cost?', a: `Interior painting runs ${PRICES.interior.low} to ${PRICES.interior.high} per square foot. Exterior runs ${PRICES.exterior.low} to ${PRICES.exterior.high} per square foot. Cabinets, staining, epoxy and drywall are quoted per project.` },
+      { q: 'Are you licensed and insured?', a: `Yes. California contractor license #${SITE.license}, C-33 Painting and Decorating. Licensed, bonded and insured.` },
+      { q: 'What does the guarantee cover?', a: `Peeling, blistering, flaking, cracking or loss of adhesion caused by our prep or application, for ${g} years. Labor and paint. Normal wear, sun fading, water damage and high-traffic surfaces like decks and floors are not covered.` },
+      { q: 'Where do you work?', a: 'Tujunga, Sunland, La Crescenta, La Cañada Flintridge, Burbank, Glendale, North Hollywood, Sherman Oaks, the Hollywood Hills, Santa Monica, Venice and West Los Angeles.' },
+    ],
+  },
+  { type: 'poster', kicker: 'Free Estimate', h2: 'Get Your Written Quote This Week', body: `Send the form or call ${SITE.phone}. A real person answers.`, photo: '004' },
+];
+
+assertPhotoSet('free-estimate', ['013', '043', '060', '102', '036', '052', '008', '004']);
+---
+<Base
+  title="Free Painting Estimate | Los Angeles Painters | Master's Pro"
+  description={`Free painting estimate from a licensed Tujunga painting contractor. Interior ${PRICES.interior.low} to ${PRICES.interior.high}/sq ft. Exterior ${PRICES.exterior.low} to ${PRICES.exterior.high}/sq ft. ${g}-year guarantee. 5.0 stars on Google.`}
+  noindex
+  minimalNav
+>
+  <section class="hero" data-service-swap={JSON.stringify(swap)}>
+    <div class="hero-text rule-r">
+      <div class="kicker">Free Painting Estimate · Tujunga & Los Angeles</div>
+      <h1 class="h1">House Painting in Los Angeles. Free Estimate, Written Quote, {g}-Year Guarantee.</h1>
+      <p class="lede" data-lede style="margin-bottom:32px">Interior, exterior and cabinet painting from a licensed Tujunga crew with {SITE.reviewCount} five-star Google reviews. Tell us about your project and we reply within one business day.</p>
+      <div class="checks" style="margin-bottom:36px">
+        <div class="check">Licensed CA #{SITE.license}</div>
+        <div class="check">Bonded & Insured</div>
+        <div class="check">{g}-Year Workmanship Guarantee</div>
+        <div class="check">{SITE.years} Years Experience</div>
+      </div>
+      <div class="btn-row" style="margin-bottom:40px">
+        <a href="#estimate" class="btn btn-red">Get My Free Estimate →</a>
+        <a href={SITE.tel} class="btn btn-outline">Call {SITE.phone}</a>
+      </div>
+      <ProofLine />
+    </div>
+    <div class="hero-media">
+      <Photo id="013" priority sizes="(max-width: 900px) 100vw, 50vw" />
+      <EstimateForm title="Get your free estimate" />
+    </div>
+  </section>
+  <Sections sections={sections} />
+</Base>

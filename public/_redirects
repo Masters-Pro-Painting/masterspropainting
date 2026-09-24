@@ -1,0 +1,42 @@
+# Old WordPress addresses -> new pages. 301 = permanent, keeps Google rankings and old links.
+# /exterior-painting/, /interior-painting/ and /commercial-painting/ need no rule:
+# the new pages live at the same addresses.
+
+# old pages
+/home                              /                              301
+/about-us                          /                              301
+/services                          /                              301
+/gallery                           /                              301
+/contact-us                        /                              301
+
+# old service posts
+/residential-painting              /                              301
+/cabinets-painting                 /cabinet-painting/             301
+/furniture-painting                /cabinet-painting/             301
+/metal-cabinets-painting           /cabinet-painting/             301
+/door-painting                     /exterior-painting/            301
+/window-frame-painting             /exterior-painting/            301
+/garage-door-painting              /exterior-painting/            301
+/waterproofing                     /exterior-painting/            301
+/pressure-washing                  /exterior-painting/            301
+/industrial-painting               /commercial-painting/          301
+/parking-lines-painting            /commercial-painting/          301
+/stain                             /staining-wood-refinishing/    301
+/pergolas                          /staining-wood-refinishing/    301
+/epoxy-flooring-for-parking-lots   /epoxy-flooring/               301
+
+# old archives and feeds
+/category/*                        /                              301
+/tag/*                             /                              301
+/author/*                          /                              301
+/feed                              /                              301
+/comments/feed                     /                              301
+
+# old WordPress sitemaps -> the new sitemap
+/sitemap.xml                            /sitemap-index.xml        301
+/sitemap_index.xml                      /sitemap-index.xml        301
+/wp-sitemap.xml                         /sitemap-index.xml        301
+/wp-sitemap-posts-post-1.xml            /sitemap-index.xml        301
+/wp-sitemap-posts-page-1.xml            /sitemap-index.xml        301
+/wp-sitemap-taxonomies-category-1.xml   /sitemap-index.xml        301
+/wp-sitemap-taxonomies-post_tag-1.xml   /sitemap-index.xml        301

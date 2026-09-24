@@ -1,0 +1,42 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Sections from '../components/Sections.astro';
+import { SITE } from '../data/site';
+---
+<Base
+  title="Thanks. We Got Your Request | Master's Pro Painting Inc"
+  description="Your painting estimate request was received. Here is what happens next."
+  noindex
+  noForm
+>
+  <section class="split">
+    <div class="pad rule-r">
+      <div class="kicker">Request Received</div>
+      <h1 class="h1">Thanks<span data-first-name></span>. We're On It.</h1>
+      <p class="lede" style="margin-bottom:32px">Your estimate request is in. We reply within one business day to book your free on-site walkthrough. Need it sooner? Call now. A real person answers.</p>
+      <div class="btn-row"><a href={SITE.tel} class="btn btn-red">Call {SITE.phone}</a><a href="/" class="btn btn-outline">Back to Home</a></div>
+    </div>
+    <div class="media" style="min-height:420px"><Photo id="008" priority /></div>
+  </section>
+  <section class="section">
+    <div class="kicker">What Happens Next</div>
+    <h2 class="h2 maxw-760" style="margin-bottom:40px">Three Steps to Your Written Quote</h2>
+    <div class="steps">
+      <div><div class="n">01</div><div class="t">We Call You</div><p>Within one business day, from {SITE.phone}. Save the number so you know it is us.</p></div>
+      <div><div class="n">02</div><div class="t">Free Walkthrough</div><p>We visit, measure every surface and talk through colors, prep and timing.</p></div>
+      <div><div class="n">03</div><div class="t">Written Quote</div><p>Clear scope and price in writing. Backed by our {SITE.guaranteeYears}-year workmanship guarantee.</p></div>
+    </div>
+  </section>
+  <Sections sections={[
+    { type: 'reviews', kicker: 'While You Wait', h2: 'Read What Our Clients Say', keys: ['karla', 'shane', 'julio'] },
+  ]} />
+  <section class="poster">
+    <div><div class="kicker">Our Promise</div><h2 class="h2-poster">{SITE.guaranteeYears} Years. Labor and Materials. In Writing.</h2></div>
+    <div><p>If our workmanship fails, we come back and fix it. Read the full guarantee before we even meet.</p><div class="btn-row"><a href="/7-year-guarantee/" class="btn btn-white">Read the Guarantee →</a><a href={SITE.tel} class="btn btn-outline-white">{SITE.phone}</a></div></div>
+  </section>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({ event: 'lead_thank_you_view' });
+  </script>
+</Base>

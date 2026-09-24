@@ -1,0 +1,23 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE } from '../data/site';
+---
+<Base title="Privacy Policy | Master's Pro Painting Inc" description="How Master's Pro Painting Inc collects and uses information submitted through this website." breadcrumbs={[{ href: '/', label: 'Home' }, { label: 'Privacy Policy' }]} noForm>
+  <section class="section">
+    <div class="prose">
+      <div class="kicker">Last updated September 2026</div>
+      <h1 class="h1">Privacy Policy</h1>
+      <p>This policy explains what information {SITE.name} collects through this website and how we use it.</p>
+      <h2>Information you give us</h2>
+      <p>When you request an estimate we collect your name, phone number, city or ZIP code, and the service you are interested in. We use it only to contact you about your project, schedule an estimate and provide a quote.</p>
+      <h2>Information collected automatically</h2>
+      <p>Like most websites, we use analytics and advertising tools, such as Google Analytics and Google Ads, that use cookies to measure visits and see which ads and pages lead to estimate requests. These tools may collect your IP address, browser type, pages visited and the ad or link that brought you here.</p>
+      <h2>How we share information</h2>
+      <p>We do not sell your personal information. We share it only with service providers that help us run our business, such as our customer management software, and only for that purpose, or when required by law.</p>
+      <h2>Your choices and California rights</h2>
+      <p>You can ask us what information we hold about you, ask us to correct it, or ask us to delete it. You can also block or delete cookies in your browser settings. To make a request, contact us using the details below.</p>
+      <h2>Contact</h2>
+      <p>{SITE.name}<br />{SITE.addressLine}<br /><a href={SITE.tel}>{SITE.phone}</a> · <a href={`mailto:${SITE.email}`}>{SITE.email}</a></p>
+    </div>
+  </section>
+</Base>

@@ -1,0 +1,48 @@
+// Real Google reviews for Master's Pro Painting Inc, copied verbatim from the
+// Google Business Profile on 2026-09-16 (30 reviews, all 5 stars; 4 are
+// star-only with no text and are not shown). Do not edit wording or add
+// locations. `service` only uses Google's own service tags or what the
+// reviewer wrote. `age` is relative to 2026-09-16; refresh monthly.
+
+export type Review = {
+  key: string;
+  name: string;
+  age: string;
+  service?: string;
+  translated?: boolean;
+  text: string;
+};
+
+export const REVIEWS: Record<string, Review> = {
+  max: { key: 'max', name: 'Max Emerson', age: '6 months ago', service: 'Lime wash', text: 'Vlad was super professional. His team did a lovely job. They did a great job prepping surfaces, were super considerate and delicate with my belongings, and performed a gorgeous lime wash. Totally reccomend.' },
+  jose: { key: 'jose', name: 'Jose Dominguez', age: '9 months ago', service: 'Cabinet staining', text: 'Vladimir and his team did an amazing job staining our kitchen cabinets. The color came out perfect and the work was super clean. We’re really happy with the result. highly recommended Master’s Pro Painting Inc.' },
+  wendy: { key: 'wendy', name: 'Wendy Connor', age: '4 months ago', service: 'Interior painting', text: 'Vladimir and his crew did an amazing job painting the interior of my house. They were on time maintained a clean work space and very professional. I highly recommend him if you looking for high quality work to be done.' },
+  estefany: { key: 'estefany', name: 'Estefany Arias', age: '9 months ago', service: 'Epoxy garage floor', text: 'Masters Pro Painting Inc. did an excellent job on my garage epoxy floor. Great prep, clean work, and a beautiful, durable finish. Very professional highly recommended.' },
+  delmy: { key: 'delmy', name: 'Delmy Lemus', age: '2 months ago', service: 'Interior & exterior painting', text: 'We had a great experience with Vlad and his team. They are professional, reliable and pay close attention to detail. Their quality of work exceeded our expectations, and our home looks amazing. We highly recommend Masters pro painting.' },
+  marybeth: { key: 'marybeth', name: 'Mary Beth DeStefano', age: '2 months ago', service: 'Interior painting', text: 'Master’s Pro Painting did such an OUTSTANDING job on my daughter and son in laws first new house:) Vladimir and his crew went out of their way to transform a garage into an extra bonus room for them. I called from Texas, trying to help my daughter with their hectic schedule, find someone to do the job, after their contractor bailed on them. Vladimir was the first person to respond and after explaining our situation, he contacted my son in law and after seeing his great reviews, I didn’t bother to contact anyone else! He immediately put our minds at ease:) Vladimir and his crew were very kind, professional and efficient and we so appreciate them getting everything done in such a timely manner!! I highly recommend Master’s Pro Painting, their quality of work is AMAZING!!!' },
+  heather: { key: 'heather', name: 'Heather Lerner', age: '1 month ago', service: 'Cabinet, interior & exterior painting', text: 'Great service by Vlad and his team. We have used him on multiple projects on multiple properties. Always very responsive and responsible.' },
+  karla: { key: 'karla', name: 'Karla Alvarado', age: '10 months ago', service: 'Residential project', text: 'hired Master’s Pro Painting Inc for a residential project, and I couldn’t be more satisfied with their work. Vladimir is incredibly responsible, arrived on time, and showed up with a team that was truly professional, respectful, and honest. The quality of their work was outstanding — the details were flawless, the finish was excellent, and the materials they used were high-quality, which really shows in the final result. I highly recommend Master’s Pro Painting Inc 100%. They are a reliable, serious, and highly professional company. I would absolutely hire them again for future projects.' },
+  ryan: { key: 'ryan', name: 'Ryan Rehm', age: '9 months ago', text: 'Master Pro Painting does incredible work! Thoughtful, professional, tidy and just all around great people to work with. I highly recommend them!!!' },
+  molly: { key: 'molly', name: 'Molly Philbin', age: '9 months ago', service: 'Home painting, repeat client', text: 'Working with master’s pro painting is a wonderful experience. I’ve used them several times for home painting jobs and I recommend them with no reservations. Their responsiveness and attention to detail are flawless.' },
+  leslie: { key: 'leslie', name: 'Leslie Appelbaum', age: '4 months ago', text: 'Vladamir is professional, reliable, knowledgeable and reasonable. He did a great job and I’m very pleased with his work.' },
+  wildwood: { key: 'wildwood', name: 'Wildwood Flower Radio Hour', age: '2 months ago', service: 'Interior painting', text: 'Absolutely brilliant working with these painters. Showed up on time and left a neat work space when done.' },
+  michael: { key: 'michael', name: 'Michael Philbin', age: '9 months ago', text: 'I had Vladimir of Master’s Pro Painting work on a couple of my homes in Oregon several years ago. Additionally, he’s been doing work for my father in Los Angeles. Vladimir is very meticulous, and does exceptional work. Five stars.' },
+  jorge: { key: 'jorge', name: 'Jorge Rico', age: '3 months ago', text: 'Great customer service Great quality of work and super professional highly recommended for your next home renovation services' },
+  hugo: { key: 'hugo', name: 'Hugo Escobar', age: '9 months ago', service: 'Clinic painting', text: 'Outstanding work every time! We use this painter for all of our clinic sites, and the quality is consistently excellent. They’re reliable, professional, detail-oriented, and always respectful of our staff and patients. The work is clean, efficient, and done right the first time. Highly recommend for any commercial or clinic painting projects!' },
+  omar: { key: 'omar', name: 'Omar Ortega', age: '3 months ago', service: 'Custom painting', text: 'The best in paintings excellent service, friendly 100% recommended' },
+  shane: { key: 'shane', name: 'Shane Lerner', age: '9 months ago', service: 'Interior, exterior & drywall repair', text: 'Master\'s pro painting has done a great job for me for many years. I have hired him and his team to do many different projects. I\'ve had him do handyman services and repairs. Painting interior and exterior of large homes, drywall repairs and he has always shown up on time and been very easy to work with. We really appreciate Vladimir and his team for everything they do. Their pricing is very fair and all of his work is done with quality and he stands by his work. Thank you Vladimir!' },
+  anthony: { key: 'anthony', name: 'Anthony Vaca', age: '9 months ago', service: 'High-end projects', text: 'Vladimir is a hard working individual who takes the utmost pride in the work that he does. I’ve been fortunate enough to have worked with him on several high-end projects that required special attention and have always been satisfied with the results. If you are looking for a diligent, professional and experienced painter, look no further than the team at Master’s Pro Painting.' },
+  kathy: { key: 'kathy', name: 'Kathy May', age: '8 months ago', text: 'Excellent, careful, meticulous work! The best!' },
+  daniel: { key: 'daniel', name: 'Daniel Sparks', age: '6 months ago', text: 'The BEST!!! Hands-down.' },
+  sandee: { key: 'sandee', name: 'Sandee Ochs', age: '2 weeks ago', service: 'Door painting', text: 'Vladimir was exceptional. He was able to take care of some electrical that no other electrician would tackle, besides an amazing paint job. He was on time, courteous, friendly, and cleaned up afterwards. I can\'t recommend him enough... AND he was reasonable when it came to the bill!' },
+  mario: { key: 'mario', name: 'Mario Pallais', age: '2 months ago', service: 'Exterior painting', text: 'Vladimir and Masters Pro Painting did an outstanding job painting the exterior of our home. The quality, attention to detail, and professionalism were excellent from start to finish. I highly recommend Vladimir and his team to anyone looking for a reliable painting contractor.' },
+  julio: { key: 'julio', name: 'Julio Garcia', age: '2 months ago', service: 'Interior & exterior painting', text: 'Valdimir thank you, him and his team did a beautiful job my wife and I bought our second home and needed to paint interior and exterior, they showed up when they said they would, they did fabulous job never left a mess I will definitely use them again in the future and will definitely refer to people I know' },
+  derek: { key: 'derek', name: 'Derek Chen', age: '2 months ago', service: 'Exterior painting', text: 'Did a great job painting the exterior of my house. Completely changed the look. Great service and on time also left the job site spotless and clean which l love to see. Thank you so much ! Would definitely recommend them.' },
+  nelson: { key: 'nelson', name: 'Nelson Valdez', age: '4 months ago', service: 'New home painting', translated: true, text: 'Excellent service, the best company. I wouldn\'t hesitate to hire them again. From the start, we received top-notch service, with a reasonable and accurate quote for the work to be done. I\'m grateful to Vladimir for his enthusiasm and helpfulness while painting my new home. I recommend them 100%, and 5 stars don\'t do justice to the excellent service and work they did. Without a doubt, the best.' },
+};
+
+export const pick = (keys: string[]) => keys.map((k) => {
+  const r = REVIEWS[k];
+  if (!r) throw new Error(`Unknown review key: ${k}`);
+  return r;
+});

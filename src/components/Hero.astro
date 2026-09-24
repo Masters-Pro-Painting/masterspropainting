@@ -1,0 +1,78 @@
+---
+import type { HeroData } from '../data/types';
+import { SITE } from '../data/site';
+import Photo from './Photo.astro';
+import EstimateForm from './EstimateForm.astro';
+import ProofLine from './ProofLine.astro';
+
+interface Props { hero: HeroData }
+const { hero } = Astro.props;
+const text = { kicker: hero.kicker, h1: hero.h1, lede: hero.lede, bullets: hero.bullets };
+---
+{(hero.variant === 'split' || hero.variant === 'split-left') && (
+  <section class="hero">
+    {hero.variant === 'split-left' && (
+      <div class="hero-media">
+        <Photo id={hero.photo} priority sizes="(max-width: 900px) 100vw, 50vw" />
+        <EstimateForm title={hero.formTitle} service={hero.service} />
+      </div>
+    )}
+    <div class:list={['hero-text', hero.variant === 'split' ? 'rule-r' : 'rule-l']}>
+      <div class="kicker">{text.kicker}</div>
+      <h1 class="h1">{text.h1}</h1>
+      <p class="lede" style="margin-bottom:32px">{text.lede}</p>
+      <div class="checks">{text.bullets.map((b) => <div class="check">{b}</div>)}</div>
+      <div class="btn-row">
+        <a href="#estimate" class="btn btn-red">Book a Free Estimate →</a>
+        <a href={SITE.tel} class="btn btn-outline">Call {SITE.phone}</a>
+      </div>
+      <ProofLine meta={hero.proofMeta} />
+    </div>
+    {hero.variant === 'split' && (
+      <div class="hero-media">
+        <Photo id={hero.photo} priority sizes="(max-width: 900px) 100vw, 50vw" />
+        <EstimateForm title={hero.formTitle} service={hero.service} />
+      </div>
+    )}
+  </section>
+)}
+
+{hero.variant === 'banner' && (
+  <section class="hero-banner">
+    <Photo id={hero.photo} priority sizes="100vw" />
+    <div class="hero-text">
+      <div class="kicker">{text.kicker}</div>
+      <h1 class="h1">{text.h1}</h1>
+      <p class="lede" style="margin-bottom:32px">{text.lede}</p>
+      <div class="checks" style="margin-bottom:36px">{text.bullets.map((b) => <div class="check">{b}</div>)}</div>
+      <div class="btn-row" style="margin-bottom:40px">
+        <a href="#estimate" class="btn btn-red">Book a Free Estimate →</a>
+        <a href={SITE.tel} class="btn btn-outline">Call {SITE.phone}</a>
+      </div>
+      <ProofLine meta={hero.proofMeta} />
+    </div>
+    <div class="form-slot">
+      <EstimateForm title={hero.formTitle} service={hero.service} />
+    </div>
+  </section>
+)}
+
+{hero.variant === 'stacked' && (
+  <section>
+    <div class="hero-stacked-top">
+      <div class="kicker">{text.kicker}</div>
+      <h1 class="h1">{text.h1}</h1>
+      <p class="lede">{text.lede}</p>
+      <div class="checks">{text.bullets.map((b) => <div class="check">{b}</div>)}</div>
+    </div>
+    <div class="hero" style="border-bottom:2px solid #201e1d">
+      <div class="hero-media" style="border-right:2px solid #201e1d">
+        <Photo id={hero.photo} priority sizes="(max-width: 900px) 100vw, 50vw" />
+      </div>
+      <div class="hero-text" style="display:flex;flex-direction:column;justify-content:center;gap:28px">
+        <EstimateForm title={hero.formTitle} service={hero.service} />
+        <div style="padding:0 clamp(16px,3vw,48px)"><ProofLine meta={hero.proofMeta} /></div>
+      </div>
+    </div>
+  </section>
+)}

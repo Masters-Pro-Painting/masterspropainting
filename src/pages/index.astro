@@ -1,0 +1,187 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Stats from '../components/Stats.astro';
+import Photo from '../components/Photo.astro';
+import ReviewCard from '../components/ReviewCard.astro';
+import { SITE, PRICES } from '../data/site';
+import { pick } from '../data/reviews';
+import { AREA_INDEX, REGIONS, areaHref } from '../data/area-index';
+import type { QA } from '../data/types';
+
+const services = [
+  { title: 'Exterior Painting', href: '/exterior-painting/', img: '014', alt: 'Repainted stucco home exterior with a black garage door', body: 'Washing, scraping, stucco patching and priming before the finish goes on. Built to hold up under the Southern California sun.' },
+  { title: 'Interior Painting', href: '/interior-painting/', img: '004', alt: 'Freshly painted open-plan dining room and kitchen', body: 'Walls, ceilings, trim and doors with sharp lines and smooth, even coverage. Floors and furniture protected the whole time.' },
+  { title: 'Cabinet Painting', href: '/cabinet-painting/', img: '043', alt: 'White painted kitchen cabinets and island', body: 'Sprayed finishes with no brush marks. A kitchen or bath that looks new for a fraction of what replacement costs.' },
+  { title: 'Commercial Painting', href: '/commercial-painting/', img: '001', alt: 'Crew on a lift painting a medical clinic facade', body: 'Medical clinics, offices and retail. Planned around your hours so your doors stay open while we work.' },
+  { title: 'Staining & Wood Refinishing', href: '/staining-wood-refinishing/', img: '028', alt: 'Stained wood porch steps and handrails', body: 'Decks, doors, beams, soffits and natural wood cabinets restored, stained and sealed against weather and wear.' },
+  { title: 'Epoxy Floors & Specialty', href: '/epoxy-flooring/', img: '036', alt: 'Gray flake epoxy garage floor', body: 'Epoxy garage floors, drywall repair, entry doors and metal railings. Finished by the same crew that paints your home.' },
+];
+
+const reasons = [
+  { n: '01', t: 'Licensed, Bonded & Insured', b: `California contractor license #${SITE.license}, C-33 Painting and Decorating. Your property is protected.` },
+  { n: '02', t: 'Meticulous Prep', b: 'Scraping, sanding, patching, caulking and priming before a single finish coat goes on.' },
+  { n: '03', t: 'Straight, Accurate Quotes', b: 'Written quotes with the scope spelled out. Reviewers call us responsive, reliable and reasonable.' },
+  { n: '04', t: 'Clean Every Day', b: 'Floors, furniture and landscaping protected. Reviewers keep mentioning the spotless job site.' },
+];
+
+const gallery = [
+  { img: '043', cat: 'Cabinets' }, { img: '014', cat: 'Exterior' }, { img: '004', cat: 'Interior' }, { img: '079', cat: 'Commercial' },
+  { img: '060', cat: 'Interior' }, { img: '052', cat: 'Cabinets' }, { img: '028', cat: 'Staining' }, { img: '036', cat: 'Specialty' },
+  { img: '102', cat: 'Exterior' }, { img: '105', cat: 'Exterior' }, { img: '076', cat: 'Commercial' }, { img: '042', cat: 'Cabinets' },
+];
+const cats = ['All', 'Exterior', 'Interior', 'Cabinets', 'Commercial', 'Staining', 'Specialty'];
+
+const steps = [
+  { t: 'Free On-Site Estimate', b: 'We walk the property with you, measure every surface and answer your questions. No pressure, no obligation.' },
+  { t: 'Clear Written Quote', b: 'Scope, materials, timeline and price in writing. Once you approve, we lock in your start date.' },
+  { t: 'Prep & Paint', b: 'Floors and furniture protected, surfaces properly prepared, quality paint applied the right way.' },
+  { t: 'Final Walkthrough', b: 'We review every detail together, handle touch-ups on the spot and leave your space clean.' },
+];
+
+const faq: QA[] = [
+  { q: 'How much does it cost to paint a house in Tujunga, CA?', a: `Interior painting runs ${PRICES.interior.low} to ${PRICES.interior.high} per square foot. Exterior painting runs ${PRICES.exterior.low} to ${PRICES.exterior.high} per square foot. Where your project lands depends on prep, height, surface condition and trim. Cabinets, staining, epoxy and drywall are quoted per project. Every job gets a written quote after a free on-site visit.` },
+  { q: 'Are you licensed and insured in California?', a: `Yes. Master's Pro Painting Inc holds California contractor license #${SITE.license}, classification C-33 Painting and Decorating, and is licensed, bonded and insured. You can <a href="https://www.cslb.ca.gov/OnlineServices/CheckLicenseII/CheckLicense.aspx" target="_blank" rel="noopener">verify the license on the CSLB website</a>.` },
+  { q: 'What does your 7-year guarantee cover?', a: 'If paint we applied peels, blisters, flakes, cracks or loses adhesion because of our prep or application, we fix it for seven years. Labor and paint included. Normal wear, sun fading, water damage and high-traffic surfaces like decks and floors are not covered. <a href="/7-year-guarantee/">Read the full terms</a>.' },
+  { q: 'Do you offer free estimates in Burbank and Glendale?', a: 'Yes. Free on-site estimates are available across our whole service area, including <a href="/service-areas/burbank-ca/">Burbank</a>, <a href="/service-areas/glendale-ca/">Glendale</a>, the <a href="/service-areas/hollywood-hills-ca/">Hollywood Hills</a>, <a href="/service-areas/santa-monica-ca/">Santa Monica</a> and <a href="/service-areas/venice-ca/">Venice</a>.' },
+  { q: 'Do I need to move furniture or be home while you work?', a: 'Put away small items and valuables. We cover floors, furniture and fixtures and keep them protected for the whole job. You are welcome to be home while we work.' },
+  { q: 'What payment methods do you accept?', a: `${SITE.payments.join(', ').replace(/, ([^,]*)$/, ' and $1')}. Payment terms are written into your quote.` },
+];
+
+const reviews = pick(['mario', 'hugo', 'wendy', 'heather', 'estefany', 'julio']);
+---
+<Base
+  title="House Painters Tujunga, CA | Interior & Exterior | Master's Pro Painting"
+  description="Licensed & insured house painters in Tujunga, CA. Interior, exterior and cabinet painting across Burbank, Glendale and LA. 7-year guarantee. Free estimates: (323) 712-4699."
+  faq={faq}
+>
+  <Hero hero={{
+    variant: 'split',
+    kicker: "Tujunga's 5-Star Rated Painting Contractor",
+    h1: 'House Painters in Tujunga, CA. Interior & Exterior Painting Done Right.',
+    lede: "Master's Pro Painting Inc delivers clean lines, meticulous prep and finishes that last. For homes and businesses across Tujunga, Burbank, Glendale, the Hollywood Hills, Santa Monica and Venice.",
+    bullets: ['Licensed, Bonded & Insured in California', `${SITE.years} Years of Experience`, `${SITE.guaranteeYears}-Year Workmanship Guarantee`, 'Free On-Site Estimates'],
+    photo: '013',
+  }} />
+
+  <Stats />
+
+  <section id="services" class="section" style="padding-bottom:0">
+    <div class="section-head">
+      <div>
+        <div class="kicker">Our Painting Services</div>
+        <h2 class="h2">Residential &amp; Commercial Painting Services in Los Angeles</h2>
+        <p class="copy">One crew, one point of contact, every surface. Inside and out.</p>
+      </div>
+      <a href="#estimate" class="btn btn-outline">Get a Quote for Any Service →</a>
+    </div>
+    <div class="card-grid">
+      {services.map((s) => (
+        <a href={s.href} class="svc-card">
+          <div class="ph"><Photo id={s.img} alt={s.alt} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 33vw" /></div>
+          <div class="body"><h3 class="h3">{s.title}</h3><p>{s.body}</p><span class="link-arrow">See {s.title} →</span></div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section id="about" class="split">
+    <div class="media" style="border-right:2px solid #201e1d"><Photo id="008" alt="The Master's Pro Painting crew outside a building" /></div>
+    <div class="pad">
+      <div class="kicker">About Master's Pro Painting</div>
+      <h2 class="h2 mb-24">A Local Crew That Treats Your Home Like Their Own</h2>
+      <div class="copy">
+        <p>Master's Pro Painting Inc is a Latino-owned painting company based on Foothill Blvd in Tujunga. Owner Vladimir Rivera, Vlad to most of his clients, brings {SITE.years} years of painting experience to every job.</p>
+        <p>Read our Google reviews and you will see his name come up again and again. {SITE.reviewCount} reviews, all five stars. Homeowners, repeat clients with multiple properties, and a medical clinic group that uses us across its sites.</p>
+        <p>We are licensed, bonded and insured in California. We show up when we say we will, we protect your home like it is ours, and we back the work with a {SITE.guaranteeYears}-year written workmanship guarantee.</p>
+      </div>
+      <div class="region-cols mt-32" style="padding-top:24px;border-top:2px solid #201e1d;gap:20px 32px">
+        <div><div style="font-size:15px;font-weight:800">CA Lic. #{SITE.license}</div><div class="small">C-33 Painting &amp; Decorating</div></div>
+        <div><div style="font-size:15px;font-weight:800">{SITE.guaranteeYears}-Year Guarantee</div><div class="small">Labor and materials, in writing</div></div>
+        <div><div style="font-size:15px;font-weight:800">Latino-Owned</div><div class="small">Based in Tujunga, CA</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="split">
+    <div class="pad rule-r">
+      <div class="kicker">Why Homeowners Choose Us</div>
+      <h2 class="h2 mb-24">The Difference Is in the Prep</h2>
+      <p class="copy mb-32">Peeling. Bubbling. Roller marks. Most paint failures trace back to rushed preparation. We don't rush it. Here's what every Master's Pro project includes.</p>
+      <a href="#estimate" class="btn btn-red">Book a Free Estimate →</a>
+    </div>
+    <div class="reason-grid">
+      {reasons.map((r) => <div><div class="n">{r.n}</div><div class="t">{r.t}</div><p>{r.b}</p></div>)}
+    </div>
+  </section>
+
+  <section id="gallery" class="section" data-gallery>
+    <div class="section-head">
+      <div><div class="kicker">Recent Projects</div><h2 class="h2">Our Work Across Los Angeles</h2></div>
+      <div class="filters" role="group" aria-label="Filter projects">
+        {cats.map((c) => <button type="button" data-filter={c} aria-pressed={c === 'All' ? 'true' : 'false'}>{c}</button>)}
+      </div>
+    </div>
+    <div class="photo-grid">
+      {gallery.map((g) => (
+        <figure class="tile" data-cat={g.cat}><Photo id={g.img} sizes="(max-width: 700px) 100vw, (max-width: 1100px) 50vw, 25vw" /><figcaption>{g.cat}</figcaption></figure>
+      ))}
+    </div>
+  </section>
+
+  <section id="process" class="section">
+    <div class="kicker">How It Works</div>
+    <h2 class="h2 maxw-760" style="margin-bottom:40px">From Free Estimate to Final Walkthrough in Four Steps</h2>
+    <div class="steps">
+      {steps.map((st, i) => <div><div class="n">{String(i + 1).padStart(2, '0')}</div><div class="t">{st.t}</div><p>{st.b}</p></div>)}
+    </div>
+  </section>
+
+  <section id="reviews" class="section alt">
+    <div class="section-head">
+      <div><div class="kicker">What Our Clients Say</div><h2 class="h2">Rated {SITE.rating} Stars Across {SITE.reviewCount} Google Reviews</h2></div>
+      <a class="google-badge" href={SITE.mapsUrl} target="_blank" rel="noopener"><span class="stars">★★★★★</span> Read all {SITE.reviewCount} on Google</a>
+    </div>
+    <div class="review-grid">{reviews.map((r) => <ReviewCard review={r} />)}</div>
+  </section>
+
+  <section class="poster">
+    <div><div class="kicker">Ready to Get Started?</div><h2 class="h2-poster">Get Your Free Painting Estimate in Tujunga, CA</h2></div>
+    <div>
+      <p>Free on-site estimate. Clear written quote. {SITE.guaranteeYears}-year workmanship guarantee. Zero pressure.</p>
+      <div class="btn-row"><a href="#estimate" class="btn btn-white">Book a Free Estimate →</a><a href={SITE.tel} class="btn btn-outline-white">{SITE.phone}</a></div>
+    </div>
+  </section>
+
+  <section id="faq" class="faq">
+    <div class="intro">
+      <div class="kicker">Your Questions Answered</div>
+      <h2 class="h2 mb-24">Hiring a Painter in Tujunga: FAQ</h2>
+      <p style="font-size:16px;color:#444141;margin-bottom:24px">Straight answers to what homeowners ask us most. Don't see yours? Call us. A real person answers.</p>
+      <a href={SITE.tel} style="font-weight:800;font-size:18px;color:#0B3D7A">{SITE.phone} →</a>
+    </div>
+    <div class="items" data-faq>
+      {faq.map((f, i) => <details open={i === 0}><summary>{f.q}</summary><div class="a" set:html={f.a} /></details>)}
+    </div>
+  </section>
+
+  <section id="areas" class="split">
+    <div class="pad rule-r">
+      <div class="kicker">Proudly Serving Los Angeles County</div>
+      <h2 class="h2" style="margin-bottom:16px">Painters in Tujunga and Surrounding Communities</h2>
+      <p style="font-size:16px;color:#444141;margin-bottom:32px">Based on Foothill Blvd in Tujunga, we serve the foothills, the Valley and the Westside. Not listed? Ask. We probably cover it.</p>
+      <div class="region-cols">
+        {REGIONS.map((r) => (
+          <div><div class="rh">{r}</div>{AREA_INDEX.filter((a) => a.region === r).map((a) => <a href={areaHref(a.slug)}>{a.city}, CA</a>)}</div>
+        ))}
+      </div>
+    </div>
+    <div class="media" style="min-height:420px">
+      <Photo id="001" alt="Master's Pro Painting crew on a lift painting a commercial building facade" />
+      <div class="addr-bar">
+        <div><div style="font-size:15px;font-weight:800">{SITE.name}</div><div class="small">{SITE.addressLine}</div></div>
+        <a href={SITE.mapsUrl} target="_blank" rel="noopener" style="font-weight:800;font-size:14px">Get Directions →</a>
+      </div>
+    </div>
+  </section>
+</Base>

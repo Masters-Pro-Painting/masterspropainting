@@ -1,0 +1,15 @@
+---
+import Base from '../layouts/Base.astro';
+import { SITE, NAV_SERVICES } from '../data/site';
+---
+<Base title="Page Not Found | Master's Pro Painting Inc" description="That page does not exist. Find painting services and service areas for Master's Pro Painting Inc in Tujunga, CA." noindex noForm>
+  <section class="split">
+    <div class="pad rule-r">
+      <div class="kicker">404</div>
+      <h1 class="h1">That Page Is Not Here.</h1>
+      <p class="lede" style="margin-bottom:32px">The link may be old or mistyped. Try one of these, or call us at {SITE.phone}.</p>
+      <div class="btn-row"><a href="/" class="btn btn-red">Go to Home →</a><a href={SITE.tel} class="btn btn-outline">Call {SITE.phone}</a></div>
+    </div>
+    <div class="pad"><ul class="list-checks">{NAV_SERVICES.map((s) => <li><a href={s.href} style="color:#201e1d">{s.label}</a></li>)}<li><a href="/service-areas/" style="color:#201e1d">Service Areas</a></li></ul></div>
+  </section>
+</Base>
