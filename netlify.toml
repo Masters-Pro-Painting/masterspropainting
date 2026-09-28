@@ -9,7 +9,7 @@
   NODE_VERSION = "22"
   # "true"  = whole site noindex + robots.txt blocks crawlers (use until the domain points here)
   # "false" = live and indexable
-  PUBLIC_STAGING = "true"
+  PUBLIC_STAGING = "false"
   # ---- TRACKING: paste IDs between the quotes. Nothing else to install. ----
   # Public values (they appear in every page's source). Empty = that tracking is off.
   # Don't paste Google's <script> code anywhere. The site already has it built in.
