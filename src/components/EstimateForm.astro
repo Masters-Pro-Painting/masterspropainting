@@ -44,10 +44,13 @@ const TRACKING_FIELDS = [
       <label class="field"><span class="sr-only">Phone</span>
         <input name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="Phone" required />
       </label>
+      <label class="field"><span class="sr-only">Email</span>
+        <input name="email" type="email" autocomplete="email" inputmode="email" placeholder="Email" required />
+      </label>
       <label class="field"><span class="sr-only">City or ZIP</span>
         <input name="city" autocomplete="postal-code" placeholder="City or ZIP" />
       </label>
-      <label class="field"><span class="sr-only">Service needed</span>
+      <label class="field field-full"><span class="sr-only">Service needed</span>
         <select name="service">
           <option value="">Service needed</option>
           {SERVICE_OPTIONS.map((s) => <option selected={s === service}>{s}</option>)}

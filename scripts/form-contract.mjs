@@ -12,7 +12,7 @@ const CONTRACT = {
     'form-name', 'page_url', 'page_title', 'referrer', 'landing_page',
     'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
     'gclid', 'gbraid', 'wbraid', 'fbclid', 'submitted_at',
-    'name', 'phone', 'city', 'service', 'company_website',
+    'name', 'phone', 'email', 'city', 'service', 'company_website',
   ],
 };
 

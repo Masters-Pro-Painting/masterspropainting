@@ -95,7 +95,7 @@ function toE164(raw: string): string {
 
 // Sends the GA4 lead event and the Google Ads form conversion, then calls done().
 // done() always runs, even if Google is blocked or slow (1.2s cap).
-function sendLeadConversions(phone: string, service: string, done: () => void) {
+function sendLeadConversions(phone: string, email: string, service: string, done: () => void) {
   const t = tracking();
   const gtag = window.gtag;
   let finished = false;
@@ -109,8 +109,12 @@ function sendLeadConversions(phone: string, service: string, done: () => void) {
 
   if (t.ads && t.adsFormLabel) {
     pending += 1;
-    // Enhanced conversions for leads: Google hashes this before sending.
-    if (e164) gtag('set', 'user_data', { phone_number: e164 });
+    // Enhanced conversions for leads: Google hashes these before sending.
+    // Email on its own qualifies; phone alone does not.
+    const userData: Record<string, string> = {};
+    if (email) userData.email = email.trim().toLowerCase();
+    if (e164) userData.phone_number = e164;
+    if (Object.keys(userData).length) gtag('set', 'user_data', userData);
     gtag('event', 'conversion', { send_to: `${t.ads}/${t.adsFormLabel}`, transaction_id: txId, event_callback: one });
   }
   if (t.ga4) {
@@ -144,12 +148,15 @@ function initForms() {
       if (String(fd.get('company_website') || '')) return; // honeypot
       const name = String(fd.get('name') || '').trim();
       const phone = String(fd.get('phone') || '').trim();
+      const email = String(fd.get('email') || '').trim();
       const nameEl = form.elements.namedItem('name') as HTMLInputElement;
       const phoneEl = form.elements.namedItem('phone') as HTMLInputElement;
-      nameEl.removeAttribute('aria-invalid'); phoneEl.removeAttribute('aria-invalid');
+      const emailEl = form.elements.namedItem('email') as HTMLInputElement;
+      nameEl.removeAttribute('aria-invalid'); phoneEl.removeAttribute('aria-invalid'); emailEl.removeAttribute('aria-invalid');
       const d = digits(phone);
       if (name.length < 2) { nameEl.setAttribute('aria-invalid', 'true'); if (err) err.textContent = 'Please add your name.'; nameEl.focus(); return; }
       if (d.length < 10 || d.length > 11) { phoneEl.setAttribute('aria-invalid', 'true'); if (err) err.textContent = 'Please add a 10-digit phone number so we can call you back.'; phoneEl.focus(); return; }
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { emailEl.setAttribute('aria-invalid', 'true'); if (err) err.textContent = 'Please add your email so we can send your estimate.'; emailEl.focus(); return; }
       if (err) err.textContent = '';
 
       fillTrackingFields(form);
@@ -171,7 +178,7 @@ function initForms() {
       }
 
       safeSession(() => sessionStorage.setItem('mp_lead_first', name.split(/\s+/)[0]), undefined);
-      sendLeadConversions(phone, String(fd.get('service') || ''), () => { location.href = '/thank-you/'; });
+      sendLeadConversions(phone, email, String(fd.get('service') || ''), () => { location.href = '/thank-you/'; });
     });
   });
 }

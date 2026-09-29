@@ -172,6 +172,7 @@ button, input, select, textarea { font-family: inherit; }
 .form-card .title { font-size: 24px; font-weight: 800; line-height: 1.1; margin-bottom: 18px; }
 .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 10px; }
 .field { display: block; }
+.form-grid .field-full { grid-column: 1 / -1; }
 .field input, .field select { background: var(--surface); border: 1px solid var(--ink); padding: 12px; font-size: 16px; width: 100%; border-radius: 0; color: var(--ink); min-height: 48px; appearance: none; }
 .field select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 18px) 21px, calc(100% - 13px) 21px; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 32px; }
 .field input[aria-invalid='true'] { border: 2px solid var(--red); }
