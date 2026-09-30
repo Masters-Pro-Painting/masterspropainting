@@ -27,7 +27,7 @@ export const SERVICES: PageData[] = [
       proofMeta: 'Walls · Ceilings · Trim<br>Doors · Garages · Lime wash',
     },
     sections: [
-      { type: 'reviews', kicker: 'Interior Jobs, Real Reviews', h2: 'What Homeowners Say About Our Interior Work', keys: ['wendy', 'wildwood', 'max'] },
+      { type: 'reviews', kicker: 'Interior Jobs, Real Reviews', h2: 'What Homeowners Say About Our Interior Work', keys: ['wendy', 'manuel', 'wildwood'] },
       {
         type: 'split', kicker: 'Why Interior Paint Jobs Look Tired Fast', h2: 'Paint Is the Easy Part. Prep Is the Job.', photo: '004',
         paras: [
@@ -124,7 +124,7 @@ export const SERVICES: PageData[] = [
         type: 'grid', kicker: 'Recent Exterior Work', h2: 'Outside Jobs by Our Crew',
         tiles: [{ photo: '104', label: 'Window trim' }, { photo: '102', label: 'Stucco repaint' }, { photo: '108', label: 'Painted brick' }, { photo: '105', label: 'Carport & fascia' }],
       },
-      { type: 'reviews', kicker: 'More Exterior Reviews', h2: 'Homeowners Who Hired Us for the Outside', keys: ['derek', 'julio', 'delmy'] },
+      { type: 'reviews', kicker: 'More Exterior Reviews', h2: 'Homeowners Who Hired Us for the Outside', keys: ['jo', 'derek', 'julio'] },
       { type: 'guarantee', photo: '101', note: 'Sun fading, chalking, water damage and new stucco cracks from settling are not workmanship failures and are not covered.' },
       {
         type: 'faq', h2: 'Exterior Painting FAQ', intro: 'What to know before you repaint the outside of your house.',

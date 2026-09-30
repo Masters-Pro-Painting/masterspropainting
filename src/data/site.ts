@@ -46,7 +46,7 @@ export const SITE = {
   hoursSchema: 'Mo-Sa 07:00-17:00',
   license: '1140485',
   licenseClass: 'C-33 Painting and Decorating',
-  years: '11+',
+  years: '15+',
   rating: '5.0',
   reviewCount: 32,
   guaranteeYears: 7,
