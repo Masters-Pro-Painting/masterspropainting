@@ -243,7 +243,14 @@ const trackAnywhere = import.meta.env.PUBLIC_TRACK_STAGING === 'true';
     </div>
     <div class="footer-bottom">
       <span>© {year} {SITE.name}. All rights reserved. CA Lic. #{SITE.license}. Licensed, Bonded &amp; Insured.</span>
-      <span><a href="/privacy-policy/">Privacy Policy</a> · <a href="/sitemap-index.xml">Sitemap</a></span>
+      <span>
+        <a href="/privacy-policy/">Privacy Policy</a> · <a href="/sitemap-index.xml">Sitemap</a> ·{' '}
+        {/* Site credit. Plain text on the ads landing page (no links out of it). A normal link
+            on the homepage, nofollow elsewhere, so it is one credit link and not a sitewide one. */}
+        {minimalNav
+          ? <span>Website by GrowthReconAI.com</span>
+          : <a href="https://growthreconai.com/websites" target="_blank" rel={Astro.url.pathname === '/' ? 'noopener' : 'noopener nofollow'}>Website by GrowthReconAI.com</a>}
+      </span>
     </div>
   </footer>
 
