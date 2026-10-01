@@ -1,7 +1,9 @@
 # Master's Pro Painting Inc — website
 
 Live site: https://masterspropaint.com (email stays on masterspropaintinginc.company)
-Built with [Astro](https://astro.build). Hosted on Netlify. Every push to `main` publishes the site.
+Built with [Astro](https://astro.build). Hosted on Netlify.
+
+**Publishing today:** the repo is not linked in Netlify yet, so a push to `main` does not publish. Run `npm run deploy` for a private draft, or `npm run deploy -- --publish` to go live. It builds with the settings in `netlify.toml` and refuses to publish a build with tracking missing or hidden from Google. A draft is the same build as live. Tracking only runs on masterspropaint.com, so opening a draft link sends nothing to GA4 or Google Ads. After a publish, `node scripts/verify-live.mjs` checks the live site without sending a lead. It needs a Netlify access token in `.env.vlad` (never committed). Once the repo is linked in Netlify, every push to `main` publishes by itself.
 
 ## Edit something
 

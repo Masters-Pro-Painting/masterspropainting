@@ -76,6 +76,11 @@ if (breadcrumbs.length) {
 }
 const year = 2026;
 const gtagId = TRACKING.ga4 || TRACKING.ads;
+// Tracking only runs on the real domain. Draft links, previews and staging copies send
+// nothing to GA4 or Google Ads, so test visits and test leads never count.
+// PUBLIC_TRACK_STAGING=true turns it on anywhere, for a deliberate tracking test.
+const liveHost = new URL(SITE.url).hostname;
+const trackAnywhere = import.meta.env.PUBLIC_TRACK_STAGING === 'true';
 ---
 <!doctype html>
 <html lang="en">
@@ -102,16 +107,26 @@ const gtagId = TRACKING.ga4 || TRACKING.ads;
   {graph.map((g) => <script type="application/ld+json" set:html={JSON.stringify(g)} />)}
   {gtagId && (
     <>
-      <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${gtagId}`}></script>
-      <script is:inline define:vars={{ T: TRACKING, PHONE: SITE.phone, TEL: SITE.tel }}>
-        window.__MP_TRACKING = T;
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){ dataLayer.push(arguments); }
-        window.gtag = gtag;
-        gtag('js', new Date());
-        if (T.ga4) gtag('config', T.ga4);
-        if (T.ads) gtag('config', T.ads, { allow_enhanced_conversions: true });
-        if (T.ads && T.adsCallLabel) {
+      <script is:inline define:vars={{ T: TRACKING, PHONE: SITE.phone, TEL: SITE.tel, GTAG_ID: gtagId, LIVE_HOST: liveHost, TRACK_ANYWHERE: trackAnywhere }}>
+        var onLive = TRACK_ANYWHERE || location.hostname === LIVE_HOST || location.hostname === 'www.' + LIVE_HOST;
+        // The number showing on the page right now. Google's forwarding number replaces it for ad visitors.
+        var cur = { tel: TEL, label: PHONE };
+        window.__MP_PHONE = cur;
+        // Off the real domain the IDs are blanked, so the form and phone links send nothing either.
+        window.__MP_TRACKING = onLive ? T : { ga4: '', ads: '', adsFormLabel: '', adsCallLabel: '' };
+        var gtag = function () { dataLayer.push(arguments); };
+        if (onLive) {
+          var tag = document.createElement('script');
+          tag.async = true;
+          tag.src = 'https://www.googletagmanager.com/gtag/js?id=' + GTAG_ID;
+          document.head.appendChild(tag);
+          window.dataLayer = window.dataLayer || [];
+          window.gtag = gtag;
+          gtag('js', new Date());
+          if (T.ga4) gtag('config', T.ga4);
+          if (T.ads) gtag('config', T.ads, { allow_enhanced_conversions: true });
+        }
+        if (onLive && T.ads && T.adsCallLabel) {
           // Website call conversions. For visitors from an ad, Google hands back a
           // forwarding number. Swap it into every visible number and tap-to-call link.
           gtag('config', T.ads + '/' + T.adsCallLabel, {
@@ -121,9 +136,22 @@ const gtagId = TRACKING.ga4 || TRACKING.ads;
               if (d.length === 10) d = '1' + d;
               if (d.length !== 11) return;
               var swap = function () {
-                document.querySelectorAll('a[href="' + TEL + '"]').forEach(function (a) { a.setAttribute('href', 'tel:+' + d); });
+                // Google calls this again when it refreshes the number, so replace the
+                // original number and whatever was swapped in last time.
+                var newTel = 'tel:+' + d;
+                [TEL, cur.tel].forEach(function (h) {
+                  document.querySelectorAll('a[href="' + h + '"]').forEach(function (a) { a.setAttribute('href', newTel); });
+                });
                 var w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
-                var n; while ((n = w.nextNode())) { if (n.nodeValue.indexOf(PHONE) !== -1) n.nodeValue = n.nodeValue.split(PHONE).join(formatted); }
+                var n; while ((n = w.nextNode())) {
+                  // data-no-swap: text that must keep the real number (the number we call back from).
+                  if (n.parentElement && n.parentElement.closest('[data-no-swap]')) continue;
+                  [PHONE, cur.label].forEach(function (p) {
+                    if (p !== formatted && n.nodeValue.indexOf(p) !== -1) n.nodeValue = n.nodeValue.split(p).join(formatted);
+                  });
+                }
+                cur = { tel: newTel, label: formatted };
+                window.__MP_PHONE = cur;
               };
               if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', swap); else swap();
             }

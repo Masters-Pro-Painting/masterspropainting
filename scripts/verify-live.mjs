@@ -3,8 +3,8 @@
 //
 //   npm run build && node scripts/verify-live.mjs https://masterspropaint.com
 //   node scripts/verify-live.mjs https://<project>.netlify.app --staging
-//     (--staging expects noindex and skips the old-URL redirects)
-import { readFileSync, readdirSync, statSync, existsSync } from 'node:fs';
+//     (--staging expects noindex and skips the redirect and tracking checks)
+import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -22,7 +22,7 @@ const walk = (d) => readdirSync(d).flatMap((f) => { const p = join(d, f); return
 const routes = walk(BUILD).filter((p) => p.endsWith('index.html'))
   .map((p) => '/' + relative(BUILD, p).split('\\').join('/').replace(/index\.html$/, ''));
 
-// A. every new page is served by the new site, not by WordPress
+// A. every page is served by the new site, with the right robots setting
 for (const r of routes) {
   const res = await get(r);
   const html = res.status === 200 ? await res.text() : '';
@@ -31,7 +31,7 @@ for (const r of routes) {
   const needsForm = !/^\/(thank-you|privacy-policy)\/$/.test(r);
   const noindexPage = /^\/(thank-you|free-estimate)\/$/.test(r);
   const indexable = html.includes('content="index, follow');
-  const okIndex = STAGING ? true : noindexPage ? !indexable : indexable;
+  const okIndex = STAGING ? !indexable : noindexPage ? !indexable : indexable;
   const ok = res.status === 200 && isNew && !wpLeak && (!needsForm || html.includes('data-lead-form')) && okIndex;
   check(ok, `page ${r}`, `${res.status}${!isNew ? ' OLD-SITE' : ''}${wpLeak ? ' WP-LEAK' : ''}${!okIndex ? ' ROBOTS-META' : ''}`);
 }
@@ -45,21 +45,31 @@ for (const r of routes) {
 
 // C. old WordPress URLs redirect to the right new pages (map in public/_redirects)
 if (!STAGING) {
-  const rules = readFileSync(join(ROOT, 'public', '_redirects'), 'utf8').split(/?
-/)
-    .map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).map((l) => l.split(/s+/));
-  const map = rules.map(([from, to]) => [from.includes('*') ? from.replace('*', 'example/') : from, to]);
+  const rules = readFileSync(join(ROOT, 'public', '_redirects'), 'utf8').split(/\r?\n/)
+    .map((l) => l.trim()).filter((l) => l && !l.startsWith('#')).map((l) => l.split(/\s+/));
+  // Path rules only. Whole-domain rules (they start with http) are checked in C2.
+  const map = rules.filter(([from]) => !/^https?:\/\//.test(from))
+    .map(([from, to]) => [from.includes('*') ? from.replace('*', 'example/') : from, to]);
   for (const [from, to] of map) {
-    const res = await get(from);
-    const loc = (res.headers.get('location') || '').replace(base, '');
-    check(res.status === 301 && loc === to, `redirect ${from}`, `${res.status} -> ${loc || '(none)'} (want ${to})`);
+    try {
+      const res = await get(from);
+      const loc = (res.headers.get('location') || '').replace(base, '');
+      check(res.status === 301 && loc === to, `redirect ${from}`, `${res.status} -> ${loc || '(none)'} (want ${to})`);
+    } catch (e) { check(false, `redirect ${from}`, e.message); }
   }
+
+  // C2. the Netlify address goes to the real domain, path and query kept
+  try {
+    const res = await fetch('https://masterspropainting.netlify.app/interior-painting/?x=1', { redirect: 'manual', headers: UA });
+    const loc = res.headers.get('location') || '';
+    check(res.status === 301 && loc === 'https://masterspropaint.com/interior-painting/?x=1', 'netlify.app address redirects to the domain', `${res.status} -> ${loc || '(none)'}`);
+  } catch (e) { check(false, 'netlify.app address redirects to the domain', e.message); }
 }
 
 // D/E. robots + sitemap
 {
   const robots = await (await get('/robots.txt')).text();
-  check(STAGING ? robots.includes('Disallow: /') : robots.includes('sitemap-index.xml') && !/^Disallow: \/\s*$/m.test(robots), 'robots.txt', robots.split('\n').slice(0, 3).join(' | '));
+  check(STAGING ? /^Disallow: \/\s*$/m.test(robots) : robots.includes('sitemap-index.xml') && !/^Disallow: \/\s*$/m.test(robots), 'robots.txt', robots.split('\n').slice(0, 3).join(' | '));
   const sm = await get('/sitemap-index.xml');
   check(sm.status === 200 && (await sm.text()).includes('<sitemapindex'), 'sitemap-index.xml', String(sm.status));
   const s0 = await get('/sitemap-0.xml');
@@ -68,26 +78,42 @@ if (!STAGING) {
   check(s0.status === 200 && missing.length === 0, 'sitemap lists every page', missing.length ? `missing ${missing.join(', ')}` : `${routes.length - 2} pages`);
 }
 
-// F. images: served, right type, long cache
+// F. images served as webp with a long cache; security headers on pages
 {
-  const home = await (await get('/')).text();
+  const homeRes = await get('/');
+  const home = await homeRes.text();
   const img = home.match(/\/_astro\/[^"' ]+\.webp/)?.[0];
   if (img) {
     const res = await get(img);
     const cc = res.headers.get('cache-control') || '';
     check(res.status === 200 && /image\/webp/.test(res.headers.get('content-type') || ''), 'image serves as webp', `${res.status} ${res.headers.get('content-type')}`);
-    check(STAGING || /immutable|max-age=31536000/.test(cc), 'image long cache', cc || '(no cache-control)');
+    check(/immutable|max-age=31536000/.test(cc), 'image long cache', cc || '(no cache-control)');
   } else check(false, 'image found on homepage');
+  check((homeRes.headers.get('x-content-type-options') || '') === 'nosniff', 'security headers on pages', homeRes.headers.get('x-content-type-options') || '(missing)');
+  // Netlify's free-plan badge sits on the mobile Free Estimate button unless the page lifts it.
+  const badge = home.includes('netlify/scripts/hud');
+  check(!badge || home.includes('nl-badge-frame'), 'Netlify badge is off, or lifted clear of the button bar', badge ? 'badge on, lift present' : 'badge off');
 }
 
 // G. form + tracking present
 {
   const html = await (await get('/interior-painting/')).text();
   check(/name="form-name" value="estimate"/.test(html), 'Netlify form "estimate" on pages');
-  const toml = readFileSync(join(ROOT, 'netlify.toml'), 'utf8');
-  const ga4 = (toml.match(/PUBLIC_GA4_ID = "([^"]*)"/) || [])[1] || '';
-  const ads = (toml.match(/PUBLIC_ADS_ID = "([^"]*)"/) || [])[1] || '';
-  if (ga4 || ads) check(html.includes('googletagmanager.com/gtag/js?id=') && (!ga4 || html.includes(ga4)) && (!ads || html.includes(ads)), 'Google tag on pages', `ga4=${ga4 || '-'} ads=${ads || '-'}`);
+  if (!STAGING) {
+    // Compare the same cleaned-up values the site renders (src/data/site.ts), not the raw text.
+    const toml = readFileSync(join(ROOT, 'netlify.toml'), 'utf8');
+    const raw = (key) => ((toml.match(new RegExp(key + '\\s*=\\s*"([^"]*)"')) || [])[1] || '').trim();
+    const ga4 = (raw('PUBLIC_GA4_ID').match(/\bG-[A-Z0-9]{6,}\b/i) || [''])[0].toUpperCase();
+    const adsNum = (raw('PUBLIC_ADS_ID').match(/^(?:AW-)?(\d{6,})/i) || [])[1];
+    const ads = adsNum ? `AW-${adsNum}` : '';
+    const label = (key) => raw(key).replace(/^AW-\d+\//i, '');
+    check(!!ga4 && !!ads, 'tracking IDs set in netlify.toml', `ga4=${ga4 || '(empty)'} ads=${ads || '(empty)'}`);
+    check(html.includes('googletagmanager.com/gtag/js?id=') && html.includes(ga4) && html.includes(ads), 'Google tag on pages', `ga4=${ga4} ads=${ads}`);
+    for (const key of ['PUBLIC_ADS_FORM_LABEL', 'PUBLIC_ADS_CALL_LABEL']) {
+      const v = label(key);
+      check(!!v && html.includes(v), `${key} on pages`, v || '(empty)');
+    }
+  }
 }
 
 const bad = results.filter((r) => !r.ok);

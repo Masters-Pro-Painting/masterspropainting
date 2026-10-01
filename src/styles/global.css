@@ -179,7 +179,8 @@ button, input, select, textarea { font-family: inherit; }
 .form-card button[type='submit'] { width: 100%; text-align: left; padding: 15px 18px; }
 .form-card .micro { font-size: 12px; color: var(--muted); margin-top: 10px; }
 .form-card .err { color: var(--red); font-size: 13px; font-weight: 600; margin-top: 8px; min-height: 0; }
-.hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+/* Spam trap. display:none keeps browser autofill out of it (an off-screen field gets filled). */
+.hp { display: none; }
 
 /* stats */
 .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); border-bottom: var(--rule); }
@@ -336,6 +337,8 @@ button, input, select, textarea { font-family: inherit; }
 .callbar .c1 { background: var(--navy); }
 .callbar .c2 { background: var(--red); }
 @media (max-width: 900px) { .callbar { display: grid; } body { padding-bottom: 52px; } }
+/* Netlify's free-plan badge sits bottom right, on top of the Free Estimate button. Lift it above the bar. */
+@media (max-width: 900px) { #nl-badge-frame { bottom: 64px !important; } }
 
 /* prose (legal + guarantee) */
 .prose { max-width: 820px; }

@@ -8,6 +8,7 @@
     "build": "astro build && node scripts/form-contract.mjs",
     "preview": "astro preview",
     "qa": "node scripts/qa.mjs",
+    "deploy": "node scripts/deploy.mjs",
     "photos": "node scripts/prep-photos.mjs"
   },
   "dependencies": {

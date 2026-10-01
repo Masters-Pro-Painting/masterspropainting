@@ -3,10 +3,14 @@
 
 type Tracking = { ga4: string; ads: string; adsFormLabel: string; adsCallLabel: string };
 declare global {
-  interface Window { __MP_TRACKING?: Tracking; dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void }
+  interface Window { __MP_TRACKING?: Tracking; __MP_PHONE?: { tel: string; label: string }; dataLayer?: unknown[]; gtag?: (...args: unknown[]) => void }
 }
 
 const ATTR_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content', 'gclid', 'gbraid', 'wbraid', 'fbclid'];
+// Google click IDs are kept for 90 days (Google's own click window), so a visitor who
+// comes back later, or in a new tab, still sends them with the lead.
+const CLICK_KEYS = ['gclid', 'gbraid', 'wbraid'];
+const CLICK_TTL_MS = 90 * 24 * 60 * 60 * 1000;
 
 function safeSession<T>(fn: () => T, fallback: T): T {
   try { return fn(); } catch { return fallback; }
@@ -19,13 +23,29 @@ function captureAttribution() {
   if (Object.keys(found).length) {
     safeSession(() => sessionStorage.setItem('mp_attr', JSON.stringify({ ...found, landing_page: location.pathname })), undefined);
   }
+  for (const k of CLICK_KEYS) {
+    if (found[k]) safeSession(() => localStorage.setItem(`mp_${k}`, JSON.stringify({ v: found[k], t: Date.now() })), undefined);
+  }
   if (!safeSession(() => sessionStorage.getItem('mp_ref'), null)) {
     safeSession(() => sessionStorage.setItem('mp_ref', document.referrer || 'direct'), undefined);
   }
 }
 
+function storedClickId(k: string): string {
+  return safeSession(() => {
+    const saved = JSON.parse(localStorage.getItem(`mp_${k}`) || 'null');
+    if (!saved || !saved.v) return '';
+    if (Date.now() - Number(saved.t) > CLICK_TTL_MS) { localStorage.removeItem(`mp_${k}`); return ''; }
+    return String(saved.v);
+  }, '');
+}
+
 function attribution(): Record<string, string> {
-  return safeSession(() => JSON.parse(sessionStorage.getItem('mp_attr') || '{}'), {});
+  const attr: Record<string, string> = safeSession(() => JSON.parse(sessionStorage.getItem('mp_attr') || '{}'), {});
+  for (const k of CLICK_KEYS) {
+    if (!attr[k]) { const v = storedClickId(k); if (v) attr[k] = v; }
+  }
+  return attr;
 }
 
 function initMenu() {
@@ -138,14 +158,34 @@ function fillTrackingFields(form: HTMLFormElement) {
   });
 }
 
+// "Something went wrong, call us." Uses the number showing on the page right now, so an
+// ad visitor is given Google's forwarding number and the call still counts.
+function showCallFallback(err: HTMLElement | null) {
+  if (!err) return;
+  const phone = window.__MP_PHONE || { tel: 'tel:+13237124699', label: '(323) 712-4699' };
+  const a = document.createElement('a');
+  a.href = phone.tel;
+  a.textContent = phone.label;
+  err.textContent = 'Something went wrong sending your request. Please call ';
+  err.append(a, '.');
+}
+
 function initForms() {
   document.querySelectorAll<HTMLFormElement>('[data-lead-form]').forEach((form) => {
     const err = form.querySelector<HTMLElement>('.err');
     const btn = form.querySelector<HTMLButtonElement>('button[type="submit"]');
+    const btnLabel = btn?.textContent || 'Request My Free Estimate →';
+    // Back from the thank-you page restores this page from cache with the button still
+    // on "Sending…". Put it back so the visitor can correct and resend.
+    window.addEventListener('pageshow', (e) => {
+      if (e.persisted && btn) { btn.disabled = false; btn.textContent = btnLabel; }
+    });
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const fd = new FormData(form);
-      if (String(fd.get('company_website') || '')) return; // honeypot
+      // Spam trap. A browser autofill can fill it for a real person, so say something
+      // instead of failing silently. Nothing is sent and no conversion fires.
+      if (String(fd.get('company_website') || '')) { showCallFallback(err); return; }
       const name = String(fd.get('name') || '').trim();
       const phone = String(fd.get('phone') || '').trim();
       const email = String(fd.get('email') || '').trim();
@@ -172,13 +212,18 @@ function initForms() {
       } catch { ok = false; }
 
       if (!ok) {
-        if (btn) { btn.disabled = false; btn.textContent = 'Request My Free Estimate →'; }
-        if (err) err.innerHTML = 'Something went wrong sending your request. Please call <a href="tel:+13237124699">(323) 712-4699</a>.';
+        if (btn) { btn.disabled = false; btn.textContent = btnLabel; }
+        showCallFallback(err);
         return;
       }
 
       safeSession(() => sessionStorage.setItem('mp_lead_first', name.split(/\s+/)[0]), undefined);
-      sendLeadConversions(phone, email, String(fd.get('service') || ''), () => { location.href = '/thank-you/'; });
+      const go = () => { location.href = '/thank-you/'; };
+      // One conversion per visit. Someone who goes Back and resends a correction still
+      // reaches Netlify and the CRM, but is not counted as a second lead.
+      if (safeSession(() => sessionStorage.getItem('mp_lead_sent'), null) === '1') { go(); return; }
+      safeSession(() => sessionStorage.setItem('mp_lead_sent', '1'), undefined);
+      sendLeadConversions(phone, email, String(fd.get('service') || ''), go);
     });
   });
 }

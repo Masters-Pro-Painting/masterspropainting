@@ -1,5 +1,6 @@
 # Master's Pro Painting Inc website. Netlify reads everything from this file.
-# Every push to `main` builds and publishes the live site.
+# Once the repo is linked in Netlify, every push to `main` builds and publishes the live site.
+# Until then the site is published with `npm run deploy` (see README), which reads this file.
 
 [build]
   command = "npm run build"
@@ -37,3 +38,10 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "SAMEORIGIN"
+
+# Previews and branch builds are staging: hidden from Google and no tracking.
+[context.deploy-preview.environment]
+  PUBLIC_STAGING = "true"
+
+[context.branch-deploy.environment]
+  PUBLIC_STAGING = "true"

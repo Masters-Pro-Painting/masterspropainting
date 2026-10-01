@@ -1,3 +1,7 @@
+# The Netlify address always goes to the real domain (one site, one set of numbers).
+http://masterspropainting.netlify.app/*    https://masterspropaint.com/:splat   301!
+https://masterspropainting.netlify.app/*   https://masterspropaint.com/:splat   301!
+
 # Old WordPress addresses -> new pages. 301 = permanent, keeps Google rankings and old links.
 # /exterior-painting/, /interior-painting/ and /commercial-painting/ need no rule:
 # the new pages live at the same addresses.
