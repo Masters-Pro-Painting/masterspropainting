@@ -48,7 +48,7 @@ export const SITE = {
   licenseClass: 'C-33 Painting and Decorating',
   years: '15+',
   rating: '5.0',
-  reviewCount: 32,
+  reviewCount: 33,
   guaranteeYears: 7,
   payments: ['Cash', 'Check', 'Zelle'],
 } as const;
