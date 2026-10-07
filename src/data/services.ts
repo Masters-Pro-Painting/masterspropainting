@@ -18,7 +18,7 @@ export const SERVICES: PageData[] = [
     hero: {
       variant: 'split',
       kicker: 'Interior Painting · Tujunga & Greater Los Angeles',
-      h1: 'Interior House Painting in Tujunga, CA. Clean Lines. Clean House.',
+      h1: 'Interior House Painting in Los Angeles. Clean Lines. Clean House.',
       lede: 'Walls, ceilings, trim, doors and garages. We cover your floors and furniture, fix the dings, and paint it right. Then we clean up like we were never there.',
       bullets: [`${PRICES.interior.low} to ${PRICES.interior.high} per sq ft`, `${g}-Year Workmanship Guarantee`, 'Floors & Furniture Protected', `${SITE.reviewCount} Five-Star Google Reviews`],
       photo: '060',
@@ -92,7 +92,7 @@ export const SERVICES: PageData[] = [
     hero: {
       variant: 'banner',
       kicker: 'Exterior Painting · Tujunga & Greater Los Angeles',
-      h1: 'Exterior House Painting in Tujunga, CA. Built for the LA Sun.',
+      h1: 'Exterior House Painting in Los Angeles. Built for the LA Sun.',
       lede: 'Stucco, wood siding, trim, eaves and doors. We wash, scrape, patch and prime before a drop of finish goes on. That is why it holds up.',
       bullets: [`${PRICES.exterior.low} to ${PRICES.exterior.high} per sq ft`, `${g}-Year Workmanship Guarantee`, 'Licensed, Bonded & Insured', `${SITE.rating} Stars, ${SITE.reviewCount} Google Reviews`],
       photo: '013',

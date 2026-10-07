@@ -34,7 +34,7 @@ export const SITE = {
   phone: '(323) 712-4699',
   tel: 'tel:+13237124699',
   phoneE164: '+1-323-712-4699',
-  email: 'info@masterspropaintinginc.company',
+  email: 'info@masterspropaint.com',
   street: '6470 Foothill Blvd Unit E',
   city: 'Tujunga',
   region: 'CA',
