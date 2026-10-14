@@ -2,6 +2,8 @@
 import type { Section } from '../data/types';
 import { SITE, PRICES } from '../data/site';
 import { pick, REVIEWS } from '../data/reviews';
+import { jobsFor, hasRealJobs } from '../data/jobs';
+import { photo } from '../data/photos';
 import Photo from './Photo.astro';
 import Stats from './Stats.astro';
 import TrustStrip from './TrustStrip.astro';
@@ -83,7 +85,7 @@ const { sections } = Astro.props;
       </section>
     );
 
-    case 'grid': return (
+    case 'grid': return s.hideWhenJobs && hasRealJobs(s.hideWhenJobs) ? null : (
       <section class:list={['section', s.bg]}>
         <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2>{s.intro && <p class="copy" set:html={s.intro} />}</div></div>
         <div class="photo-grid four">
@@ -180,6 +182,52 @@ const { sections } = Astro.props;
         <div><p>{s.body}</p><div class="btn-row"><a href="#estimate" class="btn btn-white">Book a Free Estimate →</a><a href={SITE.tel} class="btn btn-outline-white">{SITE.phone}</a></div></div>
       </section>
     );
+
+    case 'jobs': {
+      const jobs = jobsFor(s.service);
+      if (!jobs.length) return null;
+      const one = jobs.length === 1;
+      const h2 = one ? `A Recent ${s.service} Job in ${jobs[0].city}` : `Recent ${s.service} Jobs Around Los Angeles`;
+      return (
+        <section class:list={['section', s.bg]} data-jobs>
+          <div class="section-head"><div>
+            <div class="kicker">Recent Work</div>
+            <h2 class="h2">{h2}</h2>
+            <p class="copy">Real Master's Pro {one ? 'job' : 'jobs'}. The city and the photos come from the job itself.</p>
+          </div></div>
+          <div class="job-list">
+            {jobs.map((j) => {
+              const r = j.review ? REVIEWS[j.review] : undefined;
+              const quote = r ? (j.quote ?? (r.text.match(/^.{40,180}?[.!](\s|$)/)?.[0] ?? r.text.slice(0, 180)).trim()) : '';
+              const n = j.photos.length;
+              return (
+                <article class:list={['job-card', `n${n}`]}>
+                  <div class="job-photos">
+                    {j.photos.map((id) => {
+                      const { src } = photo(id);
+                      const ar = (src.width / src.height).toFixed(4);
+                      return <figure class="tile" style={`--ar:${ar}`}><Photo id={id} sizes={n === 1 ? '(max-width: 900px) 100vw, 60vw' : `(max-width: 600px) 100vw, ${Math.ceil(100 / n) + 10}vw`} /></figure>;
+                    })}
+                  </div>
+                  <div class="job-body">
+                    <div class="job-text">
+                      {j.preview && <div class="job-preview">Layout preview. Placeholder text until Vlad sends the real job.</div>}
+                      <div class="kicker">{j.service} · {j.month}</div>
+                      <div class="h3">{[j.city, j.region, 'CA'].filter(Boolean).join(', ')}</div>
+                      <p class="copy mt-16">{j.did}</p>
+                    </div>
+                    <div class="job-side">
+                      {r && <div class="job-review"><blockquote>“{quote}”</blockquote><span>{r.name}, Google review</span></div>}
+                      <a href="#estimate" class="btn btn-red">Get a Free Estimate →</a>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+          </div>
+        </section>
+      );
+    }
 
     case 'links': return (
       <section class:list={['section', s.bg]}>

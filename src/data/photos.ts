@@ -106,6 +106,16 @@ export const ALT: Record<string, string> = {
   '111': 'Dark window frame masked off for refinishing',
   '112': "Master's Pro crew spraying a paneled stairwell with the room sealed in plastic",
   '113': 'Finished living room with a vaulted beamed ceiling and a stone fireplace',
+  // Recent jobs (src/data/jobs.ts). Vlad's own before/after labels are in the photos.
+  '114': "Before: Master's Pro painter at work on a gray garage, ladders and drop cloth in place",
+  '115': 'After: the same garage painted red with a dark green garage door and trim',
+  '116': 'After: Craftsman house front painted red with dark green trim and window frames',
+  '117': 'Before: long living room wall with patched drywall repairs, floor covered and taped off',
+  '118': 'After: the same living room with a green limewash finish on the walls',
+  '119': 'After: bedroom walls painted dark navy',
+  '120': 'Before: kitchen masked in plastic and paper, cabinet boxes primed for spraying',
+  '121': 'After: white painted kitchen island, cabinets and curved corner shelves',
+  '122': 'After: wide view of the white painted kitchen cabinets and island',
 };
 
 export function photo(id: string): { src: ImageMetadata; alt: string } {

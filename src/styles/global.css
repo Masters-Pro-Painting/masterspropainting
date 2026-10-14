@@ -432,3 +432,25 @@ button, input, select, textarea { font-family: inherit; }
 @media (max-width: 560px) {
   .stats, .checks, .form-grid, .steps:has(> :nth-child(4)), .link-grid:has(> :nth-child(4)) { grid-template-columns: 1fr; }
 }
+
+/* Recent jobs (src/data/jobs.ts). Photos keep their own shape (--ar), so Vlad's before/after labels never get cropped. */
+.job-list { display: grid; gap: 2px; padding: 2px; }
+.job-card { display: grid; grid-template-columns: 1fr; background: var(--ground); box-shadow: 0 0 0 2px var(--ink); }
+.job-photos { display: flex; flex-wrap: nowrap; align-items: flex-start; gap: 2px; background: var(--ink); --row: 340px; }
+.job-photos .tile { flex: calc(var(--ar) * 100) 1 calc(var(--ar) * var(--row)); aspect-ratio: var(--ar); min-width: 0; max-height: 640px; }
+.job-photos .tile img { object-position: center top; }
+.job-body { padding: clamp(24px, 4vw, 48px); border-top: var(--rule); display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.job-body .h3 { font-size: clamp(24px, 2.6vw, 32px); margin-top: 8px; }
+.job-side { display: grid; gap: 24px; justify-items: start; }
+.job-review { padding-left: 16px; border-left: 4px solid var(--red); }
+.job-review blockquote { margin: 0; font-size: 17px; font-style: italic; line-height: 1.5; }
+.job-review span { display: block; margin-top: 8px; font-weight: 800; font-size: 13px; text-transform: uppercase; letter-spacing: .04em; }
+.job-preview { background: #fff3c4; border: 2px dashed var(--ink); padding: 8px 12px; font-size: 13px; font-weight: 800; margin-bottom: 16px; }
+.job-card.n1 { grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); }
+.job-card.n1 .job-body { border-top: 0; border-left: var(--rule); grid-template-columns: 1fr; align-content: center; }
+@media (max-width: 900px) {
+  .job-card.n1 { grid-template-columns: 1fr; }
+  .job-card.n1 .job-body { border-left: 0; border-top: var(--rule); }
+  .job-body { grid-template-columns: 1fr; gap: 24px; }
+}
+@media (max-width: 600px) { .job-photos { flex-wrap: wrap; --row: 150px; } .job-photos .tile { max-height: 460px; } }

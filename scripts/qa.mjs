@@ -48,7 +48,9 @@ for (const file of pages) {
   if (visible.includes('—')) problems.push(`${route}: em dash in copy: ...${visible.slice(Math.max(0, visible.indexOf('—') - 40), visible.indexOf('—') + 20)}...`);
   if (BANNED.test(visible)) problems.push(`${route}: banned word "${visible.match(BANNED)[0]}"`);
   const isCore = /^\/(service-areas\/[a-z-]+\/|interior-painting|exterior-painting|cabinet-painting|commercial-painting|staining-wood-refinishing|epoxy-flooring|drywall-repair|free-estimate)/.test(route);
-  if (isCore && photoIds.size !== 8) problems.push(`${route}: ${photoIds.size} distinct photos (want 8)`);
+  // A real Recent Jobs block replaces the 4-photo grid with 1 to 3 job photos, so those pages land between 5 and 11.
+  const [lo, hi] = main.includes('data-jobs') ? [5, 11] : [8, 8];
+  if (isCore && (photoIds.size < lo || photoIds.size > hi)) problems.push(`${route}: ${photoIds.size} distinct photos (want ${lo === hi ? lo : lo + ' to ' + hi})`);
   const words = visible.toLowerCase().split(/\s+/).filter(Boolean);
   texts[route] = words;
   rows.push({ route, words: words.length, photos: photoIds.size, title: title.length, desc: desc.length });

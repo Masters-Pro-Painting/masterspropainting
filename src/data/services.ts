@@ -47,9 +47,10 @@ export const SERVICES: PageData[] = [
         items: ['Floors, furniture and fixtures covered before prep starts', 'Nail holes, dings and hairline cracks filled and sanded', 'Gaps in trim and baseboards caulked', 'Stains and patches spot primed', 'Even finish coats, cut in by hand at ceilings and trim', 'Daily cleanup and a final walkthrough with you'],
       },
       {
-        type: 'grid', kicker: 'Recent Interior Work', h2: 'Finished Rooms by Our Crew', intro: 'Real jobs. Real photos. No stock images anywhere on this site.',
+        type: 'grid', hideWhenJobs: 'Interior Painting', kicker: 'Recent Interior Work', h2: 'Finished Rooms by Our Crew', intro: 'Real jobs. Real photos. No stock images anywhere on this site.',
         tiles: [{ photo: '005', label: 'Dining room' }, { photo: '063', label: 'Alcove' }, { photo: '065', label: 'Window trim' }, { photo: '071', label: 'Empty-home repaint' }],
       },
+      { type: 'jobs', service: 'Interior Painting' },
       {
         type: 'steps', kicker: 'How an Interior Job Runs', h2: 'Four Steps From Walkthrough to Fresh Walls',
         steps: [
@@ -121,9 +122,10 @@ export const SERVICES: PageData[] = [
         note: 'A one-story stucco house in good shape sits near the low end. Tall walls, lots of trim and heavy repair push it up. Your written quote spells out exactly what is included.',
       },
       {
-        type: 'grid', kicker: 'Recent Exterior Work', h2: 'Outside Jobs by Our Crew',
+        type: 'grid', hideWhenJobs: 'Exterior Painting', kicker: 'Recent Exterior Work', h2: 'Outside Jobs by Our Crew',
         tiles: [{ photo: '104', label: 'Window trim' }, { photo: '102', label: 'Stucco repaint' }, { photo: '108', label: 'Painted brick' }, { photo: '105', label: 'Carport & fascia' }],
       },
+      { type: 'jobs', service: 'Exterior Painting' },
       { type: 'reviews', kicker: 'More Exterior Reviews', h2: 'Homeowners Who Hired Us for the Outside', keys: ['jo', 'derek', 'julio'] },
       { type: 'guarantee', photo: '101', note: 'Sun fading, chalking, water damage and new stucco cracks from settling are not workmanship failures and are not covered.' },
       {
@@ -178,9 +180,10 @@ export const SERVICES: PageData[] = [
         ],
       },
       {
-        type: 'grid', kicker: 'Recent Cabinet Work', h2: 'Kitchens, Vanities and Pantries We Painted', bg: 'alt',
+        type: 'grid', hideWhenJobs: 'Cabinet Painting', kicker: 'Recent Cabinet Work', h2: 'Kitchens, Vanities and Pantries We Painted', bg: 'alt',
         tiles: [{ photo: '045', label: 'Charcoal vanity' }, { photo: '047', label: 'Pantry doors' }, { photo: '049', label: 'Base cabinets' }, { photo: '040', label: 'White uppers' }],
       },
+      { type: 'jobs', service: 'Cabinet Painting', bg: 'alt' },
       {
         type: 'checklist', kicker: 'The Process', h2: 'How We Paint Cabinets So the Finish Lasts', photo: '051', reverse: true,
         intro: 'Grease is what makes cabinet paint peel. So the first job is getting it off.',

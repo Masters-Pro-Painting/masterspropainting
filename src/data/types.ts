@@ -10,6 +10,8 @@ export type HeroData = {
   proofMeta?: string;
 };
 
+export type JobService = 'Interior Painting' | 'Exterior Painting' | 'Cabinet Painting';
+
 export type LinkItem = { href: string; t: string; d?: string };
 export type QA = { q: string; a: string };
 
@@ -18,7 +20,7 @@ export type Section =
   | { type: 'checklist'; kicker: string; h2: string; intro?: string; items: string[]; photo: string; reverse?: boolean; bg?: 'alt' }
   | { type: 'price'; kicker: string; h2: string; range?: string; unit?: string; pending?: string; factors: string[]; note: string; bg?: 'alt' }
   | { type: 'prices'; kicker: string; h2: string; intro: string; bg?: 'alt' }
-  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt' }
+  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt'; hideWhenJobs?: JobService }
   | { type: 'steps'; kicker: string; h2: string; steps: { t: string; b: string }[]; bg?: 'alt' }
   | { type: 'reviews'; kicker: string; h2: string; keys: string[]; bg?: 'alt' }
   | { type: 'pullquote'; key: string; kicker?: string }
@@ -26,6 +28,7 @@ export type Section =
   | { type: 'faq'; kicker?: string; h2: string; intro: string; items: QA[] }
   | { type: 'poster'; kicker: string; h2: string; body: string; photo?: string }
   | { type: 'links'; kicker: string; h2: string; intro?: string; links: LinkItem[]; bg?: 'alt' }
+  | { type: 'jobs'; service: JobService; bg?: 'alt' }
   | { type: 'stats' }
   | { type: 'trust' };
 
