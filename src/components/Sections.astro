@@ -88,7 +88,7 @@ const { sections } = Astro.props;
     case 'grid': return s.hideWhenJobs && hasRealJobs(s.hideWhenJobs) ? null : (
       <section class:list={['section', s.bg]}>
         <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2>{s.intro && <p class="copy" set:html={s.intro} />}</div></div>
-        <div class="photo-grid four">
+        <div class:list={['photo-grid', 'four', s.dense && 'dense']}>
           {s.tiles.map((t) => (
             <figure class="tile"><Photo id={t.photo} sizes="(max-width: 600px) 100vw, (max-width: 1100px) 50vw, 25vw" /><figcaption>{t.label}</figcaption></figure>
           ))}

@@ -20,7 +20,7 @@ export type Section =
   | { type: 'checklist'; kicker: string; h2: string; intro?: string; items: string[]; photo: string; reverse?: boolean; bg?: 'alt' }
   | { type: 'price'; kicker: string; h2: string; range?: string; unit?: string; pending?: string; factors: string[]; note: string; bg?: 'alt' }
   | { type: 'prices'; kicker: string; h2: string; intro: string; bg?: 'alt' }
-  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt'; hideWhenJobs?: JobService }
+  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt'; hideWhenJobs?: JobService; dense?: boolean }
   | { type: 'steps'; kicker: string; h2: string; steps: { t: string; b: string }[]; bg?: 'alt' }
   | { type: 'reviews'; kicker: string; h2: string; keys: string[]; bg?: 'alt' }
   | { type: 'pullquote'; key: string; kicker?: string }
@@ -39,6 +39,7 @@ export type PageData = {
   description: string;
   hero: HeroData;
   sections: Section[];
+  photoCount?: number; // only when a page deliberately carries more than the default 8 (photos.ts)
 };
 
 export function photosOf(page: PageData): string[] {

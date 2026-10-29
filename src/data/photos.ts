@@ -116,6 +116,15 @@ export const ALT: Record<string, string> = {
   '120': 'Before: kitchen masked in plastic and paper, cabinet boxes primed for spraying',
   '121': 'After: white painted kitchen island, cabinets and curved corner shelves',
   '122': 'After: wide view of the white painted kitchen cabinets and island',
+  // Cabinet gallery (Vlad's photo pack, Oct 29). Finished kitchens only.
+  '123': 'Kitchen cabinets painted light gray, wide view under a wood ceiling and skylight',
+  '124': 'Gray painted kitchen cabinets around a gas range and stainless hood',
+  '125': 'White painted kitchen island with a black countertop',
+  '126': 'Light gray painted beadboard upper cabinets beside a skylight',
+  '127': 'Gray painted cabinets with glass-front uppers along a long kitchen',
+  '128': 'White painted kitchen island with a dark stone countertop and wood floor',
+  '129': 'Light gray painted sink cabinets under a stone countertop',
+  '130': 'Light gray painted lower cabinets beside a stainless refrigerator',
 };
 
 export function photo(id: string): { src: ImageMetadata; alt: string } {
@@ -127,10 +136,10 @@ export function photo(id: string): { src: ImageMetadata; alt: string } {
 // Every service, area and landing page must show exactly this many distinct
 // photos. Photos can repeat across pages, never within one.
 export const PHOTOS_PER_PAGE = 8;
-export function assertPhotoSet(page: string, ids: string[]) {
+export function assertPhotoSet(page: string, ids: string[], want: number = PHOTOS_PER_PAGE) {
   const unique = new Set(ids);
-  if (ids.length !== PHOTOS_PER_PAGE || unique.size !== ids.length) {
-    throw new Error(`${page}: needs ${PHOTOS_PER_PAGE} distinct photos, got ${ids.length} (${unique.size} unique): ${ids.join(',')}`);
+  if (ids.length !== want || unique.size !== ids.length) {
+    throw new Error(`${page}: needs ${want} distinct photos, got ${ids.length} (${unique.size} unique): ${ids.join(',')}`);
   }
   for (const id of ids) photo(id);
 }

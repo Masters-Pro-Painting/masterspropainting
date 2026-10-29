@@ -454,3 +454,6 @@ button, input, select, textarea { font-family: inherit; }
   .job-body { grid-template-columns: 1fr; gap: 24px; }
 }
 @media (max-width: 600px) { .job-photos { flex-wrap: wrap; --row: 150px; } .job-photos .tile { max-height: 460px; } }
+
+/* Dense photo grid (cabinet gallery): keep 2 columns on phones so 8 tiles stay short. */
+@media (max-width: 560px) { .photo-grid.four.dense { grid-template-columns: repeat(2, minmax(0, 1fr)); } .photo-grid.dense .tile figcaption { font-size: 10px; padding: 6px 8px; } }

@@ -14,7 +14,7 @@ export function getStaticPaths() {
 
 interface Props { page: PageData }
 const { page } = Astro.props;
-assertPhotoSet(page.slug, photosOf(page));
+assertPhotoSet(page.slug, photosOf(page), page.photoCount);
 
 const priced = page.slug === 'interior-painting' ? PRICES.interior : page.slug === 'exterior-painting' ? PRICES.exterior : null;
 const serviceSchema: Record<string, unknown> = {

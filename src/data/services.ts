@@ -156,12 +156,13 @@ export const SERVICES: PageData[] = [
   {
     slug: 'cabinet-painting',
     name: 'Cabinet Painting',
-    title: "Cabinet Painting Tujunga & Los Angeles | Master's Pro Painting",
+    photoCount: 12, // cabinet-only Google Ads page: 8-photo kitchen gallery (Adam, Oct 29)
+    title: "Cabinet Painting in Los Angeles | Master's Pro Painting",
     description: `Kitchen and bathroom cabinet painting with a sprayed finish. No brush marks. Degreased, sanded and primed. 7-year guarantee. Free quote: ${SITE.phone}.`,
     hero: {
       variant: 'split-left',
       kicker: 'Cabinet Painting · Kitchens, Baths & Built-Ins',
-      h1: 'Cabinet Painting in Tujunga, CA. New Kitchen Look. No Remodel.',
+      h1: 'Cabinet Painting in Los Angeles. New Kitchen Look. No Remodel.',
       lede: 'Keep your layout and your counters. We degrease, sand, prime and spray your cabinets for a smooth, hard finish. Kitchens, bathroom vanities, pantries and built-ins.',
       bullets: ['Sprayed Finish. No Brush Marks.', 'Kitchens, Vanities & Built-Ins', `${g}-Year Workmanship Guarantee`, `${SITE.rating} Stars on Google`],
       photo: '043',
@@ -179,17 +180,20 @@ export const SERVICES: PageData[] = [
           'Wobbly boxes or doors that will not close? Tell us on the walkthrough. We will tell you straight if something is too far gone to paint.',
         ],
       },
-      {
-        type: 'grid', hideWhenJobs: 'Cabinet Painting', kicker: 'Recent Cabinet Work', h2: 'Kitchens, Vanities and Pantries We Painted', bg: 'alt',
-        tiles: [{ photo: '045', label: 'Charcoal vanity' }, { photo: '047', label: 'Pantry doors' }, { photo: '049', label: 'Base cabinets' }, { photo: '040', label: 'White uppers' }],
-      },
       { type: 'jobs', service: 'Cabinet Painting', bg: 'alt' },
+      {
+        type: 'grid', kicker: 'More Cabinet Work', h2: 'More Kitchens We Painted', intro: 'Real Master\'s Pro cabinet jobs. No stock images anywhere on this site.', dense: true,
+        tiles: [
+          { photo: '123', label: 'Light gray kitchen' }, { photo: '124', label: 'Range wall' }, { photo: '125', label: 'White island' }, { photo: '126', label: 'Beadboard uppers' },
+          { photo: '127', label: 'Glass-front uppers' }, { photo: '128', label: 'Island, Burbank job' }, { photo: '129', label: 'Sink cabinets' }, { photo: '130', label: 'Lower cabinets' },
+        ],
+      },
       {
         type: 'checklist', kicker: 'The Process', h2: 'How We Paint Cabinets So the Finish Lasts', photo: '051', reverse: true,
         intro: 'Grease is what makes cabinet paint peel. So the first job is getting it off.',
         items: ['Doors and drawers removed and labeled', 'Kitchen masked in plastic so spray stays where it belongs', 'Every surface degreased', 'Sanded and primed for adhesion', 'Finish sprayed for a smooth, even coat', 'Doors rehung, hardware back on, kitchen cleaned'],
       },
-      { type: 'reviews', kicker: 'Cabinet and Kitchen Reviews', h2: 'Clients Who Trusted Us With Their Kitchens', keys: ['heather', 'jose', 'molly'] },
+      { type: 'reviews', kicker: 'From Our Google Reviews', h2: 'What Clients Say About Our Detail Work', keys: ['jose', 'heather', 'kathy', 'molly', 'michael', 'anthony'] },
       {
         type: 'price', kicker: 'Cabinet Painting Prices', h2: 'How Cabinet Painting Is Priced', pending: 'after a free walkthrough', bg: 'alt',
         factors: ['Number of doors, drawers and panels', 'Cabinet condition and repairs', 'Color change, like dark wood to white', 'Islands, vanities and built-ins added', 'Hardware swaps'],
