@@ -161,7 +161,7 @@ export const SERVICES: PageData[] = [
     description: `Kitchen and bathroom cabinet painting with a sprayed finish. No brush marks. Degreased, sanded and primed. 7-year guarantee. Free quote: ${SITE.phone}.`,
     hero: {
       variant: 'split-left',
-      kicker: 'Cabinet Painting · Kitchens, Baths & Built-Ins',
+      kicker: 'Kitchen Cabinet Painters · Los Angeles',
       h1: 'Cabinet Painting in Los Angeles. New Kitchen Look. No Remodel.',
       lede: 'Keep your layout and your counters. We degrease, sand, prime and spray your cabinets for a smooth, hard finish. Kitchens, bathroom vanities, pantries and built-ins.',
       bullets: ['Sprayed Finish. No Brush Marks.', 'Kitchens, Vanities & Built-Ins', `${g}-Year Workmanship Guarantee`, `${SITE.rating} Stars on Google`],
@@ -175,31 +175,31 @@ export const SERVICES: PageData[] = [
       {
         type: 'split', kicker: 'Refinish or Replace?', h2: 'Most Kitchens Need New Color, Not New Boxes', photo: '042',
         paras: [
-          'If your cabinet boxes are solid and the layout works, tearing them out means paying for demolition. Paint changes the whole room for a fraction of a remodel.',
+          'If your cabinet boxes are solid and the layout works, tearing them out means paying for demolition. Repainting changes the whole room for a fraction of a remodel.',
           'White kitchens. Charcoal vanities. Gray pantry doors. Every photo on this page is a real cabinet job by our crew.',
           'Wobbly boxes or doors that will not close? Tell us on the walkthrough. We will tell you straight if something is too far gone to paint.',
         ],
       },
-      { type: 'jobs', service: 'Cabinet Painting', bg: 'alt' },
+      { type: 'jobs', service: 'Cabinet Painting', bg: 'alt', id: 'recent-work' },
       {
-        type: 'grid', kicker: 'More Cabinet Work', h2: 'More Kitchens We Painted', intro: 'Real Master\'s Pro cabinet jobs. No stock images anywhere on this site.', dense: true,
+        type: 'grid', id: 'gallery', kicker: 'More Cabinet Work', h2: 'More Kitchens We Painted', intro: 'Real Master\'s Pro cabinet jobs. No stock images anywhere on this site.', dense: true,
         tiles: [
           { photo: '123', label: 'Light gray kitchen' }, { photo: '124', label: 'Range wall' }, { photo: '125', label: 'White island' }, { photo: '126', label: 'Beadboard uppers' },
           { photo: '127', label: 'Glass-front uppers' }, { photo: '128', label: 'Island, Burbank job' }, { photo: '129', label: 'Sink cabinets' }, { photo: '130', label: 'Lower cabinets' },
         ],
       },
       {
-        type: 'checklist', kicker: 'The Process', h2: 'How We Paint Cabinets So the Finish Lasts', photo: '051', reverse: true,
+        type: 'checklist', id: 'process', kicker: 'The Process', h2: 'How We Paint Cabinets So the Finish Lasts', photo: '051', reverse: true,
         intro: 'Grease is what makes cabinet paint peel. So the first job is getting it off.',
         items: ['Doors and drawers removed and labeled', 'Kitchen masked in plastic so spray stays where it belongs', 'Every surface degreased', 'Sanded and primed for adhesion', 'Finish sprayed for a smooth, even coat', 'Doors rehung, hardware back on, kitchen cleaned'],
       },
-      { type: 'reviews', kicker: 'From Our Google Reviews', h2: 'What Clients Say About Our Detail Work', keys: ['jose', 'heather', 'kathy', 'molly', 'michael', 'anthony'] },
+      { type: 'reviews', id: 'reviews', kicker: 'From Our Google Reviews', h2: 'What Clients Say About Our Detail Work', keys: ['jose', 'heather', 'kathy', 'molly', 'michael', 'anthony'] },
       {
         type: 'price', kicker: 'Cabinet Painting Prices', h2: 'How Cabinet Painting Is Priced', pending: 'after a free walkthrough', bg: 'alt',
         factors: ['Number of doors, drawers and panels', 'Cabinet condition and repairs', 'Color change, like dark wood to white', 'Islands, vanities and built-ins added', 'Hardware swaps'],
         note: 'We count every door and drawer on the walkthrough and give you one written price. No surprises halfway through.',
       },
-      { type: 'guarantee', photo: '052', body: `If the finish on cabinets we painted peels, flakes or loses adhesion because of our prep or spraying within ${g} years, we come back and fix it. Labor and paint included. Scratches, chips from use and countertops are not covered.` },
+      { type: 'guarantee', id: 'guarantee', photo: '052', body: `If the finish on cabinets we painted peels, flakes or loses adhesion because of our prep or spraying within ${g} years, we come back and fix it. Labor and paint included. Scratches, chips from use and countertops are not covered.` },
       {
         type: 'faq', h2: 'Cabinet Painting FAQ', intro: 'What people ask before they paint instead of replace.',
         items: [

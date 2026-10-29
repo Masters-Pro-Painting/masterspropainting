@@ -31,7 +31,7 @@ const { sections } = Astro.props;
     );
 
     case 'checklist': return (
-      <section class:list={['split', s.bg]}>
+      <section class:list={['split', s.bg]} id={s.id}>
         {s.reverse && <div class="media" style="border-right:2px solid #201e1d"><Photo id={s.photo} /></div>}
         <div class:list={['pad', !s.reverse && 'rule-r']}>
           <div class="kicker">{s.kicker}</div>
@@ -86,7 +86,7 @@ const { sections } = Astro.props;
     );
 
     case 'grid': return s.hideWhenJobs && hasRealJobs(s.hideWhenJobs) ? null : (
-      <section class:list={['section', s.bg]}>
+      <section class:list={['section', s.bg]} id={s.id}>
         <div class="section-head"><div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2>{s.intro && <p class="copy" set:html={s.intro} />}</div></div>
         <div class:list={['photo-grid', 'four', s.dense && 'dense']}>
           {s.tiles.map((t) => (
@@ -107,7 +107,7 @@ const { sections } = Astro.props;
     );
 
     case 'reviews': return (
-      <section class:list={['section', s.bg ?? 'alt']}>
+      <section class:list={['section', s.bg ?? 'alt']} id={s.id}>
         <div class="section-head">
           <div><div class="kicker">{s.kicker}</div><h2 class="h2">{s.h2}</h2></div>
           <a class="google-badge" href={SITE.mapsUrl} target="_blank" rel="noopener"><span class="stars">★★★★★</span> {SITE.rating} · {SITE.reviewCount} Google Reviews</a>
@@ -139,7 +139,7 @@ const { sections } = Astro.props;
     }
 
     case 'guarantee': return (
-      <section class="guarantee">
+      <section class="guarantee" id={s.id}>
         <div class="pad">
           <div class="seal"><div><b>{SITE.guaranteeYears}</b><span>YEAR<br />GUARANTEE</span></div></div>
           <div class="kicker">In Writing. Labor and Materials.</div>
@@ -189,7 +189,7 @@ const { sections } = Astro.props;
       const one = jobs.length === 1;
       const h2 = one ? `A Recent ${s.service} Job in ${jobs[0].city}` : `Recent ${s.service} Jobs Around Los Angeles`;
       return (
-        <section class:list={['section', s.bg]} data-jobs>
+        <section class:list={['section', s.bg]} id={s.id} data-jobs>
           <div class="section-head"><div>
             <div class="kicker">Recent Work</div>
             <h2 class="h2">{h2}</h2>

@@ -17,18 +17,18 @@ export type QA = { q: string; a: string };
 
 export type Section =
   | { type: 'split'; kicker: string; h2: string; paras: string[]; photo: string; reverse?: boolean; bg?: 'alt'; cta?: string }
-  | { type: 'checklist'; kicker: string; h2: string; intro?: string; items: string[]; photo: string; reverse?: boolean; bg?: 'alt' }
+  | { type: 'checklist'; kicker: string; h2: string; intro?: string; items: string[]; photo: string; reverse?: boolean; bg?: 'alt'; id?: string }
   | { type: 'price'; kicker: string; h2: string; range?: string; unit?: string; pending?: string; factors: string[]; note: string; bg?: 'alt' }
   | { type: 'prices'; kicker: string; h2: string; intro: string; bg?: 'alt' }
-  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt'; hideWhenJobs?: JobService; dense?: boolean }
+  | { type: 'grid'; kicker: string; h2: string; intro?: string; tiles: { photo: string; label: string }[]; bg?: 'alt'; hideWhenJobs?: JobService; dense?: boolean; id?: string }
   | { type: 'steps'; kicker: string; h2: string; steps: { t: string; b: string }[]; bg?: 'alt' }
-  | { type: 'reviews'; kicker: string; h2: string; keys: string[]; bg?: 'alt' }
+  | { type: 'reviews'; kicker: string; h2: string; keys: string[]; bg?: 'alt'; id?: string }
   | { type: 'pullquote'; key: string; kicker?: string }
-  | { type: 'guarantee'; photo: string; h2?: string; body?: string; note?: string }
+  | { type: 'guarantee'; photo: string; h2?: string; body?: string; note?: string; id?: string }
   | { type: 'faq'; kicker?: string; h2: string; intro: string; items: QA[] }
   | { type: 'poster'; kicker: string; h2: string; body: string; photo?: string }
   | { type: 'links'; kicker: string; h2: string; intro?: string; links: LinkItem[]; bg?: 'alt' }
-  | { type: 'jobs'; service: JobService; bg?: 'alt' }
+  | { type: 'jobs'; service: JobService; bg?: 'alt'; id?: string }
   | { type: 'stats' }
   | { type: 'trust' };
 
